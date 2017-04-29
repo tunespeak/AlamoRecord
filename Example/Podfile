@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'AlamoRecord_Example' do
+  pod 'AlamoRecord', :path => '../'
+
+  target 'AlamoRecord_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
