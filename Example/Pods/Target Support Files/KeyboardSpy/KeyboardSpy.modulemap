@@ -1,0 +1,6 @@
+framework module KeyboardSpy {
+  umbrella header "KeyboardSpy-umbrella.h"
+
+  export *
+  module * { export * }
+}

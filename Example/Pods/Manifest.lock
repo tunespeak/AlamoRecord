@@ -1,0 +1,38 @@
+PODS:
+  - Alamofire (4.4.0)
+  - AlamofireObjectMapper (4.1.0):
+    - Alamofire (~> 4.1)
+    - ObjectMapper (~> 2.0)
+  - AlamoRecord (0.1.0):
+    - AlamofireObjectMapper (~> 4.1)
+  - KeyboardSpy (1.0)
+  - MarqueeLabel/Swift (3.1.0)
+  - NotificationBannerSwift (1.4.0):
+    - MarqueeLabel/Swift
+    - SnapKit (~> 3.2)
+  - ObjectMapper (2.2.5)
+  - SnapKit (3.2.0)
+
+DEPENDENCIES:
+  - AlamoRecord (from `../`)
+  - KeyboardSpy
+  - NotificationBannerSwift
+  - SnapKit
+
+EXTERNAL SOURCES:
+  AlamoRecord:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
+  AlamofireObjectMapper: 435adc82f5b367679bd9e71c4974a54efd0b2521
+  AlamoRecord: c5075f10d2d0e1c91027b5d3c2198b468cbf8d43
+  KeyboardSpy: edb2ab362c69d4b98b41b5a46b773e65209c2b87
+  MarqueeLabel: 061d04687ee5485ac035b45c8e292274a87afe01
+  NotificationBannerSwift: b2a81c9f0f816851686ca2e802058afd65676adc
+  ObjectMapper: fb30f71e08470d1e5a20b199fafe1246281db898
+  SnapKit: 1ca44df72cfa543218d177cb8aab029d10d86ea7
+
+PODFILE CHECKSUM: 3f63a2fa4d48882e49f031da151d69b53b92a842
+
+COCOAPODS: 1.2.1
