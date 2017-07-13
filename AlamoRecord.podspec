@@ -10,7 +10,7 @@ AlamoRecord is a powerful yet simple framework that eliminates the often complex
   s.homepage         = 'https://github.com/tunespeak/AlamoRecord'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Tunespeak' => 'daltonhint4@gmail.com' }
-  s.source           = { :git => 'https://github.com/Daltron/AlamoRecord.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/tunespeak/AlamoRecord.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '9.0'
   s.osx.deployment_target = '10.11'
