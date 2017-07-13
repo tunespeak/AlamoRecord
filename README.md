@@ -294,9 +294,9 @@ requestManager.upload(url: url,
 requestManager.download(url: url,
                         destination: destination,
                         progress: { (progress) in
-	// Check the progress                                        
+    // Check the progress                                        
 }, success: { (url) in
-	// Do something with the url            
+    // Do something with the url            
 }) { (error) in
     // Handle the error        
 }
