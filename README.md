@@ -1,6 +1,18 @@
+[![CI Status](http://img.shields.io/travis/tunespeak/AlamoRecord.svg?style=flat)](https://travis-ci.org/tunespeak/AlamoRecord)
+[![Version](https://img.shields.io/cocoapods/v/AlamoRecord.svg?style=flat)](http://cocoapods.org/pods/AlamoRecord)
+[![Platform](https://img.shields.io/cocoapods/p/AlamoRecord.svg?style=flat)](http://cocoapods.org/pods/AlamoRecord)
+<a href="https://developer.apple.com/swift"><img src="https://img.shields.io/badge/swift-3.0-4BC51D.svg?style=flat" alt="Language: Swift" /></a>
+[![License](https://img.shields.io/cocoapods/l/AlamoRecord.svg?style=flat)](http://cocoapods.org/pods/AlamoRecord)
+
 ## Written in Swift 3
 
 AlamoRecord is a powerful yet simple framework that eliminates the often complex networking layer that exists between your networking framework and your application. AlamoRecord uses the power of [AlamoFire](https://github.com/Alamofire/Alamofire), [AlamofireObjectMapper](https://github.com/tristanhimmelman/AlamofireObjectMapper) and the concepts behind the [ActiveRecord](http://guides.rubyonrails.org/active_record_basics.html) pattern to create a networking layer that makes interacting with your API easier than ever.
+
+## Requirements
+
+- iOS 8.0+ / macOS 10.10+ / tvOS 9.0+ / watchOS 2.0+
+- Xcode 8.1+
+- Swift 3.0+
 
 ## Getting Started
 
@@ -195,8 +207,8 @@ Post.all(success: { (posts: [Post]) in
 
 ```swift
 let parameters: [String: Any] = ["userId": user.id,
-                                    "title": title,
-                                    "body": body]
+                                 "title": title,
+                                 "body": body]
                                     
 Post.create(parameters: parameters, success: { (post: Post) in
 	// Do something with the post          
@@ -223,8 +235,8 @@ Post.find(id: 1, success: { (post: Post) in
 
 ```swift
 let parameters: [String: Any] = ["userId": user.id,
-                                    "title": title,
-                                    "body": body]
+                                 "title": title,
+                                 "body": body]
                                     
 post.update(parameters: parameters, success: { (post: Post) in
 	// Do something with the post     
@@ -263,11 +275,39 @@ Post.destroy(id: 1, success: {
 }
 ```
 
+### Uploading a file
+
+```swift
+requestManager.upload(url: url,
+                      multipartFormData: data,
+                      multipartFormDataName: dataName,
+                      success: { (any: Any?) in
+   	// Upload was successful                                           
+}) { (error) in
+	// Handle the error      
+}
+```
+
+### Downloading a file
+
+```swift
+requestManager.download(url: url,
+                        destination: destination,
+                        progress: { (progress) in
+	// Check the progress                                        
+}, success: { (url) in
+	// Do something with the url            
+}) { (error) in
+    // Handle the error        
+}
+```
+Providing a destination is optional. If a destination is not provided, then the file will be saved to a temporary location. This file will be overwritten if another download request is made without providing a destination.
+
 #### Download the example project to see just how easy creating an application that interacts with an API is when using AlamoRecord!
 
 ## Author
 
-Original concept designed by [Rick Pernikoff](https://github.com/rickpern). AlamoRecord implementation by [Dalton Hinterscher](https://github.com/daltron)
+Original concept designed by [Rick Pernikoff](https://github.com/rickpern). AlamoRecord implementation by [Dalton Hinterscher](https://github.com/daltron).
 
 ## License
 

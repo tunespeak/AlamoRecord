@@ -28,7 +28,7 @@ class PostsViewController: UIViewController {
         }) { (error) in
             print(error)
         }
-        
+
     }
     
     required init?(coder aDecoder: NSCoder) {
