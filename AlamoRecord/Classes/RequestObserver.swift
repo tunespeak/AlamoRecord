@@ -16,8 +16,6 @@
  
  */
 
-import UIKit
-
 public protocol RequestObserver {
     
     /*
