@@ -46,9 +46,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "607FACE41AFB9204008FA782"
-               BuildableName = "AlamoRecord_Tests.xctest"
-               BlueprintName = "AlamoRecord_Tests"
+               BlueprintIdentifier = "5C6346FA1F0B076B00158A80"
+               BuildableName = "Tests.xctest"
+               BlueprintName = "Tests"
                ReferencedContainer = "container:AlamoRecord.xcodeproj">
             </BuildableReference>
          </TestableReference>
