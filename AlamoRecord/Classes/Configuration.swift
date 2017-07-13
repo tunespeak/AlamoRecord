@@ -41,10 +41,7 @@ open class Configuration: NSObject {
     public override init() {
         super.init()
         
-        guard let bundleIdentifier = Bundle.main.bundleIdentifier else {
-            fatalError("AlamoRecord requires that your bundleIdentifier is not nil. Update your plist to include a bundle identifier.")
-        }
-        
+        let bundleIdentifier = Bundle.main.bundleIdentifier ?? "AlamoRecord"
         urlSessionConfiguration = URLSessionConfiguration.background(withIdentifier: "\(bundleIdentifier).background")
         urlSessionConfiguration.timeoutIntervalForRequest = 30.0
         urlSessionConfiguration.timeoutIntervalForResource = 30.0

@@ -35,6 +35,16 @@
 		5C96D9931F0ED260005FF25E /* PostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C96D9921F0ED260005FF25E /* PostCell.swift */; };
 		5C96D9951F0ED316005FF25E /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C96D9941F0ED316005FF25E /* BaseTableViewCell.swift */; };
 		5C96D9971F0EDB71005FF25E /* ColorsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C96D9961F0EDB71005FF25E /* ColorsExtension.swift */; };
+		5CCB20951F17064E0027BA56 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE6C8151F102C5200965235 /* Comment.swift */; };
+		5CCB20961F1706880027BA56 /* AlamoRecordError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C86407E1F09D5E6001E8320 /* AlamoRecordError.swift */; };
+		5CCB20971F1706880027BA56 /* AlamoRecordObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C94C2F31F08707F00762CFC /* AlamoRecordObject.swift */; };
+		5CCB20981F1706880027BA56 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C94C2F41F08707F00762CFC /* Configuration.swift */; };
+		5CCB20991F1706880027BA56 /* ErrorParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C94C2F51F08707F00762CFC /* ErrorParser.swift */; };
+		5CCB209A1F1706880027BA56 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C94C2F71F08707F00762CFC /* Logger.swift */; };
+		5CCB209B1F1706880027BA56 /* RequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C94C2F81F08707F00762CFC /* RequestManager.swift */; };
+		5CCB209C1F1706880027BA56 /* RequestObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C94C2F91F08707F00762CFC /* RequestObserver.swift */; };
+		5CCB209D1F1706880027BA56 /* StatusCodeObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C94C2FA1F08707F00762CFC /* StatusCodeObserver.swift */; };
+		5CCB209E1F1706880027BA56 /* URLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C94C2FB1F08707F00762CFC /* URLProtocol.swift */; };
 		5CE6C8101F102B6900965235 /* CommentsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE6C80F1F102B6900965235 /* CommentsModel.swift */; };
 		5CE6C8121F102B7E00965235 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE6C8111F102B7E00965235 /* CommentsViewController.swift */; };
 		5CE6C8141F102B8F00965235 /* CommentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE6C8131F102B8F00965235 /* CommentsView.swift */; };
@@ -344,7 +354,6 @@
 						CreatedOnToolsVersion = 8.3.2;
 						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
-						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -489,8 +498,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				5C63470B1F0B088200158A80 /* ApplicationError.swift in Sources */,
+				5CCB209A1F1706880027BA56 /* Logger.swift in Sources */,
+				5CCB20951F17064E0027BA56 /* Comment.swift in Sources */,
+				5CCB209C1F1706880027BA56 /* RequestObserver.swift in Sources */,
+				5CCB209B1F1706880027BA56 /* RequestManager.swift in Sources */,
+				5CCB20971F1706880027BA56 /* AlamoRecordObject.swift in Sources */,
+				5CCB209D1F1706880027BA56 /* StatusCodeObserver.swift in Sources */,
+				5CCB20981F1706880027BA56 /* Configuration.swift in Sources */,
 				5C6347081F0B088200158A80 /* AlamoRecordTests.swift in Sources */,
+				5CCB20991F1706880027BA56 /* ErrorParser.swift in Sources */,
 				5C63470D1F0B09B900158A80 /* ApplicationRequestManager.swift in Sources */,
+				5CCB20961F1706880027BA56 /* AlamoRecordError.swift in Sources */,
+				5CCB209E1F1706880027BA56 /* URLProtocol.swift in Sources */,
 				5C6347091F0B088200158A80 /* Post.swift in Sources */,
 				5C63470A1F0B088200158A80 /* ApplicationURL.swift in Sources */,
 			);
@@ -570,7 +589,6 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AlamoRecord_Example.app/AlamoRecord_Example";
 			};
 			name = Debug;
 		};
@@ -588,7 +606,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.daltron.Tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AlamoRecord_Example.app/AlamoRecord_Example";
 			};
 			name = Release;
 		};
