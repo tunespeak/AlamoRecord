@@ -1,4 +1,3 @@
-[![CI Status](http://img.shields.io/travis/tunespeak/AlamoRecord.svg?style=flat)](https://travis-ci.org/tunespeak/AlamoRecord)
 [![Version](https://img.shields.io/cocoapods/v/AlamoRecord.svg?style=flat)](http://cocoapods.org/pods/AlamoRecord)
 [![Platform](https://img.shields.io/cocoapods/p/AlamoRecord.svg?style=flat)](http://cocoapods.org/pods/AlamoRecord)
 <a href="https://developer.apple.com/swift"><img src="https://img.shields.io/badge/swift-3.0-4BC51D.svg?style=flat" alt="Language: Swift" /></a>
