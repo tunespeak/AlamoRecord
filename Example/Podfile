@@ -4,7 +4,7 @@ platform :ios, '9.0'
 target 'AlamoRecord_Example' do
   pod 'AlamoRecord', :path => '../'
   pod 'SnapKit'
-  pod 'NotificationBannerSwift'
+  pod 'NotificationBannerSwift', :git => 'https://github.com/Daltron/NotificationBanner', :branch => 'master'
   pod 'KeyboardSpy'
 end
 

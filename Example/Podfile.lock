@@ -3,7 +3,7 @@ PODS:
   - AlamofireObjectMapper (4.1.0):
     - Alamofire (~> 4.1)
     - ObjectMapper (~> 2.0)
-  - AlamoRecord (0.1.0):
+  - AlamoRecord (1.0.0):
     - AlamofireObjectMapper (~> 4.1)
   - KeyboardSpy (1.0)
   - MarqueeLabel/Swift (3.1.0)
@@ -16,23 +16,31 @@ PODS:
 DEPENDENCIES:
   - AlamoRecord (from `../`)
   - KeyboardSpy
-  - NotificationBannerSwift
+  - NotificationBannerSwift (from `https://github.com/Daltron/NotificationBanner`, branch `master`)
   - SnapKit
 
 EXTERNAL SOURCES:
   AlamoRecord:
     :path: "../"
+  NotificationBannerSwift:
+    :branch: master
+    :git: https://github.com/Daltron/NotificationBanner
+
+CHECKOUT OPTIONS:
+  NotificationBannerSwift:
+    :commit: 5049c7454a61048846b754c9d11884d427d5965d
+    :git: https://github.com/Daltron/NotificationBanner
 
 SPEC CHECKSUMS:
   Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
   AlamofireObjectMapper: 435adc82f5b367679bd9e71c4974a54efd0b2521
-  AlamoRecord: c5075f10d2d0e1c91027b5d3c2198b468cbf8d43
+  AlamoRecord: 446894ecda4ab00b76d241f7ea75c6dfaaf3638f
   KeyboardSpy: edb2ab362c69d4b98b41b5a46b773e65209c2b87
   MarqueeLabel: 061d04687ee5485ac035b45c8e292274a87afe01
-  NotificationBannerSwift: b2a81c9f0f816851686ca2e802058afd65676adc
+  NotificationBannerSwift: 24070736129e9ccc6614c0a91d09c04e7080ddd1
   ObjectMapper: fb30f71e08470d1e5a20b199fafe1246281db898
   SnapKit: 1ca44df72cfa543218d177cb8aab029d10d86ea7
 
-PODFILE CHECKSUM: 3f63a2fa4d48882e49f031da151d69b53b92a842
+PODFILE CHECKSUM: f1d345afa4d2a4f473d0da7d393116df11e67c67
 
 COCOAPODS: 1.2.1
