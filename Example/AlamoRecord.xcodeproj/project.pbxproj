@@ -78,7 +78,6 @@
 		5C6346E11F0B029000158A80 /* Post.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Post.swift; path = ../Tests/Post.swift; sourceTree = "<group>"; };
 		5C6346E31F0B02C000158A80 /* ApplicationURL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ApplicationURL.swift; path = ../Tests/ApplicationURL.swift; sourceTree = "<group>"; };
 		5C6346E51F0B02CD00158A80 /* ApplicationError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ApplicationError.swift; path = ../Tests/ApplicationError.swift; sourceTree = "<group>"; };
-		5C6346EF1F0B05F500158A80 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5C6346FB1F0B076B00158A80 /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C6346FF1F0B076B00158A80 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5C6347031F0B081500158A80 /* AlamoRecordTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamoRecordTests.swift; sourceTree = "<group>"; };
@@ -194,14 +193,6 @@
 			name = Comments;
 			sourceTree = "<group>";
 		};
-		5C6346EC1F0B05F500158A80 /* AlamoRecord_Tests */ = {
-			isa = PBXGroup;
-			children = (
-				5C6346EF1F0B05F500158A80 /* Info.plist */,
-			);
-			path = AlamoRecord_Tests;
-			sourceTree = "<group>";
-		};
 		5C6346FC1F0B076B00158A80 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -232,7 +223,6 @@
 			children = (
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
 				607FACD21AFB9204008FA782 /* Example for AlamoRecord */,
-				5C6346EC1F0B05F500158A80 /* AlamoRecord_Tests */,
 				5C6346FC1F0B076B00158A80 /* Tests */,
 				607FACD11AFB9204008FA782 /* Products */,
 				4466BCE21F2C3B06603C0ED6 /* Pods */,
@@ -354,7 +344,6 @@
 						CreatedOnToolsVersion = 8.3.2;
 						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
-						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -590,7 +579,6 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AlamoRecord_Example.app/AlamoRecord_Example";
 			};
 			name = Debug;
 		};
@@ -608,7 +596,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.daltron.Tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AlamoRecord_Example.app/AlamoRecord_Example";
 			};
 			name = Release;
 		};
