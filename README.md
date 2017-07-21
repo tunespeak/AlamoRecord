@@ -41,8 +41,8 @@ We first need to create a class that conforms to `URLProtocol`. Let's name it `A
 
 ```swift
 class ApplicationURL: AlamoRecord.URLProtocol {
-	
-	var absolute: String {
+
+    var absolute: String {
         return "https://jsonplaceholder.typicode.com/\(url)"
     }
     
@@ -76,8 +76,8 @@ Our class structure would then look very similar to this:
 ```swift
 class ApplicationError: AlamoRecordError {
 
-	private(set) var statusCode: Int?
-	private(set) var message: String?
+    private(set) var statusCode: Int?
+    private(set) var message: String?
 
     required init(nsError: NSError) {
         super.init(nsError: nsError)
@@ -180,7 +180,7 @@ we would only simply need to override the `keyPath` in the class declaration:
 
 ```swift
 open override class var keyPath: String? {
-	return "post"
+     return "post"
 }
 ```
 
@@ -196,7 +196,7 @@ Notice how the `requestManager` class variable is overrided and returns the `App
 Post.all(success: { (posts: [Post]) in
    // Do something with the posts
 }) { (error) in
-	// Handle the error      
+   // Handle the error      
 }
 ```
 
