@@ -21,7 +21,8 @@ public protocol StatusCodeObserver {
     /*
         After each request is finished, this method will be called if the status code of the request existed.
         parameter statusCode: The status code of the finished request
+        parameter error: The error of the finished request is there was one
      */
-    func onStatusCode(statusCode: Int)
+    func onStatusCode(statusCode: Int, error: AlamoRecordError?)
 }
 

@@ -42,7 +42,8 @@ open class Configuration: NSObject {
         super.init()
         
         let bundleIdentifier = Bundle.main.bundleIdentifier ?? "AlamoRecord"
-        urlSessionConfiguration = URLSessionConfiguration.background(withIdentifier: "\(bundleIdentifier).background")
+        let randomId = UUID.init().uuidString // Need a random id in case multiple request manager instances are created
+        urlSessionConfiguration = URLSessionConfiguration.background(withIdentifier: "\(bundleIdentifier)-\(randomId).background")
         urlSessionConfiguration.timeoutIntervalForRequest = 30.0
         urlSessionConfiguration.timeoutIntervalForResource = 30.0
     }

@@ -32,10 +32,10 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError>: NSObject {
     }
     
     /// The configuration object of the RequestManager
-    internal var configuration: Configuration!
+    public var configuration: Configuration!
     
     /// Responsible for creating and managing `Request` objects, as well as their underlying `NSURLSession`.
-    internal var sessionManager: Alamofire.SessionManager!
+    public var sessionManager: Alamofire.SessionManager!
     
     public init(configuration: Configuration) {
         self.configuration = configuration
@@ -324,6 +324,31 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError>: NSObject {
     }
     
     /**
+         Makes a request and creates the object
+         - parameter parameters: The parameters. `nil` by default
+         - parameter encoding: The parameter encoding. `URLEncoding.default` by default.
+         - parameter headers: The HTTP headers. `nil` by default.
+         - parameter success: The block to execute if the request succeeds
+         - parameter failure: The block to execute if the request fails
+     */
+    @discardableResult
+    public func createObject(url: U,
+                             parameters: Parameters? = nil,
+                             encoding: ParameterEncoding = URLEncoding.default,
+                             headers: HTTPHeaders? = nil,
+                             success:(() -> Void)?,
+                             failure:((E) -> Void)?) -> DataRequest {
+        
+        return makeRequest(.post,
+                           url: url,
+                           parameters: parameters,
+                           encoding: encoding,
+                           headers: headers,
+                           success: success,
+                           failure: failure)
+    }
+    
+    /**
          Makes a request and updates an AlamoRecordObject
          - parameter id: The id of the object to update
          - parameter parameters: The parameters. `nil` by default
@@ -378,6 +403,33 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError>: NSObject {
                          headers: headers,
                          success: success,
                          failure: failure)
+    }
+    
+    /**
+     Makes a request and updates an AlamoRecordObject
+     - parameter url: The URL that conforms to URLProtocol
+     - parameter parameters: The parameters. `nil` by default
+     - parameter keyPath: The keyPath to use when deserializing the JSON. `nil` by default.
+     - parameter encoding: The parameter encoding. `URLEncoding.default` by default.
+     - parameter headers: The HTTP headers. `nil` by default.
+     - parameter success: The block to execute if the request succeeds
+     - parameter failure: The block to execute if the request fails
+     */
+    @discardableResult
+    public func updateObject(url: U,
+                             parameters: Parameters? = nil,
+                             encoding: ParameterEncoding = URLEncoding.default,
+                             headers: HTTPHeaders? = nil,
+                             success:(() -> Void)?,
+                             failure:((E) -> Void)?) -> DataRequest {
+        
+        return makeRequest(.put,
+                           url: url,
+                           parameters: parameters,
+                           encoding: encoding,
+                           headers: headers,
+                           success: success,
+                           failure: failure)
     }
     
     /**
@@ -532,7 +584,7 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError>: NSObject {
             configuration.requestObserver?.onRequestFinished(with: url)
         }
         
-        configuration.statusCodeObserver?.onStatusCode(statusCode: response.statusCode)
+        configuration.statusCodeObserver?.onStatusCode(statusCode: response.statusCode, error: nil)
     }
     
     /**
@@ -615,7 +667,7 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError>: NSObject {
         let error: E = ErrorParser.parse(responseData, error: nsError)
         
         if let statusCode = statusCode {
-            configuration.statusCodeObserver?.onStatusCode(statusCode: statusCode)
+            configuration.statusCodeObserver?.onStatusCode(statusCode: statusCode, error: error)
         }
         
         failure?(error)
