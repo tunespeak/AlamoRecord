@@ -460,24 +460,20 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError>: NSObject {
     }
     
     /**
-         Makes an upload request
-         - parameter url: The URL that conforms to URLProtocol
-         - parameter multipartFormData: The data to append
-         - parameter multipartFormDataName: The data's name
-         - parameter headers: The HTTP headers. `nil` by default.
-         - parameter success: The block to execute if the request succeeds
-         - parameter failure: The block to execute if the request fails
+     Makes an upload request
+     - parameter url: The URL that conforms to URLProtocol
+     - parameter multipartFormData: The data to append
+     - parameter headers: The HTTP headers. `nil` by default.
+     - parameter success: The block to execute if the request succeeds
+     - parameter failure: The block to execute if the request fails
      */
     public func upload(url: U,
-                       multipartFormData: Data,
-                       multipartFormDataName: String,
+                       multipartFormData: @escaping ((MultipartFormData) -> Void),
                        headers: HTTPHeaders? = nil,
                        success: ((Any?) -> Void)?,
                        failure: ((E) -> Void)?) {
         
-        sessionManager.upload(multipartFormData: { (multipartForm) in
-            multipartForm.append(multipartFormData, withName: multipartFormDataName)
-        }, to: url.absolute, headers: headers) { (result) in
+        sessionManager.upload(multipartFormData: multipartFormData, to: url.absolute, headers: headers) { (result) in
             switch result {
             case .success(let request, _, _):
                 request.responseJSON(completionHandler: { (response) in
