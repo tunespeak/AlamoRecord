@@ -19,5 +19,4 @@ AlamoRecord is a powerful yet simple framework that eliminates the often complex
 
   s.source_files = 'AlamoRecord/Classes/**/*'
   s.dependency 'AlamofireObjectMapper', '~> 4.1'
-
 end
