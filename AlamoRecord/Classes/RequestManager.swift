@@ -54,7 +54,7 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError>: NSObject {
         - parameter headers: The HTTP headers. `nil` by default
      */
     @discardableResult
-    internal func makeRequest(_ method: Alamofire.HTTPMethod,
+    open func makeRequest(_ method: Alamofire.HTTPMethod,
                               url: U,
                               parameters: Parameters? = nil,
                               encoding: ParameterEncoding = URLEncoding.default,
@@ -80,7 +80,7 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError>: NSObject {
          - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    public func makeRequest(_ method: Alamofire.HTTPMethod,
+    open func makeRequest(_ method: Alamofire.HTTPMethod,
                             url: U,
                             parameters: Parameters? = nil,
                             encoding: ParameterEncoding = URLEncoding.default,
