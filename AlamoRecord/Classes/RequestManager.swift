@@ -462,24 +462,31 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError>: NSObject {
     /**
      Makes an upload request
      - parameter url: The URL that conforms to URLProtocol
-     - parameter multipartFormData: The data to append
+     - parameter keyPath: The keyPath to use when deserializing the JSON. `nil` by default.
      - parameter headers: The HTTP headers. `nil` by default.
+     - parameter multipartFormData: The data to append
+     - parameter progressHandler: Progress handler for following progress
      - parameter success: The block to execute if the request succeeds
      - parameter failure: The block to execute if the request fails
      */
-    public func upload(url: U,
-                       multipartFormData: @escaping ((MultipartFormData) -> Void),
+    public func upload<T: Mappable>(url: U,
+                       keyPath: String? = nil,
                        headers: HTTPHeaders? = nil,
-                       success: ((Any?) -> Void)?,
+                       multipartFormData: @escaping ((MultipartFormData) -> Void),
+                       progressHandler: Request.ProgressHandler? = nil,
+                       success: ((T) -> Void)?,
                        failure: ((E) -> Void)?) {
         
         sessionManager.upload(multipartFormData: multipartFormData, to: url.absolute, headers: headers) { (result) in
             switch result {
             case .success(let request, _, _):
-                request.responseJSON(completionHandler: { (response) in
+                if let progressHandler = progressHandler {
+                    request.uploadProgress(closure: progressHandler)
+                }
+                request.responseObject(keyPath: keyPath, completionHandler: { (response: DataResponse<T>) in
                     switch response.result {
                     case .success:
-                        success?(response.result.value)
+                        success?(response.result.value!)
                     case .failure(let error):
                         self.onFailure(error: error, response: response, failure: failure)
                     }
