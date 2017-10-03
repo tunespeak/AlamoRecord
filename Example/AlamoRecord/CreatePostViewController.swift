@@ -45,7 +45,7 @@ class CreatePostViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private dynamic func onSaveButtonPressed() {
+    @objc private dynamic func onSaveButtonPressed() {
         
         let title: String = createView.titleTextField.text ?? ""
         let body: String = createView.bodyTextView.text ?? ""

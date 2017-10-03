@@ -118,11 +118,11 @@ class PostCell: BaseTableViewCell {
         bodyLabel.text = post.body
     }
     
-    private dynamic func commentsButtonPressed() {
+    @objc private dynamic func commentsButtonPressed() {
         delegate?.commentsButtonPressed(at: indexPath.row)
     }
     
-    private dynamic func destroyButtonPressed() {
+    @objc private dynamic func destroyButtonPressed() {
         delegate?.destroyButtonPressed(at: indexPath.row)
     }
 }

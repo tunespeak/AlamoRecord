@@ -27,6 +27,21 @@ import SnapKit
 
 public class NotificationBanner: BaseNotificationBanner {
     
+    /// Notification that will be posted when a notification banner will appear
+    public static let BannerWillAppear: Notification.Name = Notification.Name(rawValue: "NotificationBannerWillAppear")
+    
+    /// Notification that will be posted when a notification banner did appear
+    public static let BannerDidAppear: Notification.Name = Notification.Name(rawValue: "NotificationBannerDidAppear")
+    
+    /// Notification that will be posted when a notification banner will appear
+    public static let BannerWillDisappear: Notification.Name = Notification.Name(rawValue: "NotificationBannerWillDisappear")
+    
+    /// Notification that will be posted when a notification banner did appear
+    public static let BannerDidDisappear: Notification.Name = Notification.Name(rawValue: "NotificationBannerDidDisappear")
+    
+    /// Notification banner object key that is included with each Notification
+    public static let BannerObjectKey: String = "NotificationBannerObjectKey"
+    
     /// The bottom most label of the notification if a subtitle is provided
     public private(set) var subtitleLabel: MarqueeLabel?
     
@@ -72,7 +87,7 @@ public class NotificationBanner: BaseNotificationBanner {
         
         titleLabel = MarqueeLabel()
         titleLabel!.type = .left
-        titleLabel!.font = UIFont.systemFont(ofSize: 17.5, weight: UIFontWeightBold)
+        titleLabel!.font = UIFont.systemFont(ofSize: 17.5, weight: UIFont.Weight.bold)
         titleLabel!.textColor = .white
         titleLabel!.text = title
         labelsView.addSubview(titleLabel!)
@@ -149,6 +164,8 @@ public class NotificationBanner: BaseNotificationBanner {
         customView.snp.makeConstraints { (make) in
             make.edges.equalTo(contentView)
         }
+        
+        spacerView.backgroundColor = customView.backgroundColor
     }
     
     required public init?(coder aDecoder: NSCoder) {

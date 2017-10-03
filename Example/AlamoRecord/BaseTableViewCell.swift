@@ -15,7 +15,14 @@ class BaseTableViewCell: UITableViewCell {
     }
     
     internal var tableView: UITableView {
-        return superview?.superview as! UITableView
+        var view = superview
+        while view != nil {
+            if let tableView = view as? UITableView {
+                return tableView
+            }
+            view = view?.superview
+        }
+        fatalError("tableView was not found for instance of BaseTableViewCell")
     }
     
     internal var indexPath: IndexPath {

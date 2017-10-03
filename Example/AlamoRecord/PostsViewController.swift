@@ -35,7 +35,7 @@ class PostsViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private dynamic func onCreatePostButtonPressed() {
+    @objc private dynamic func onCreatePostButtonPressed() {
         let createController = CreatePostViewController(delegate: self)
         navigationController?.pushViewController(createController, animated: true)
     }

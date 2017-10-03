@@ -18,7 +18,7 @@
  */
 
 public protocol KeyboardSpyAgent {
-    var keyboardEventsToSpyOn: [KeyboardSpyEvent] { get set }
+    var keyboardEventsToSpyOn: [KeyboardSpyEvent] { get }
     func keyboardSpyEventProcessed(event:KeyboardSpyEvent, keyboardInfo: KeyboardSpyInfo)
     var description: String { get }
 }

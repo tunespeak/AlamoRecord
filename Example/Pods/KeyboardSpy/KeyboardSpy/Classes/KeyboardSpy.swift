@@ -56,27 +56,27 @@ public class KeyboardSpy {
                                                object: nil)
     }
     
-    private dynamic func keyboardWillShow(notification: Notification) {
+    @objc private dynamic func keyboardWillShow(notification: Notification) {
         processKeyboardEvent(.willShow, notification: notification)
     }
     
-    private dynamic func keyboardDidShow(notification: Notification) {
+    @objc private dynamic func keyboardDidShow(notification: Notification) {
         processKeyboardEvent(.didShow, notification: notification)
     }
     
-    private dynamic func keyboardWillHide(notification: Notification) {
+    @objc private dynamic func keyboardWillHide(notification: Notification) {
         processKeyboardEvent(.willHide, notification: notification)
     }
     
-    private dynamic func keyboardDidHide(notification: Notification) {
+    @objc private dynamic func keyboardDidHide(notification: Notification) {
         processKeyboardEvent(.didHide, notification: notification)
     }
     
-    private dynamic func keyboardWillChangeFrame(notification: Notification) {
+    @objc private dynamic func keyboardWillChangeFrame(notification: Notification) {
         processKeyboardEvent(.willChangeFrame, notification: notification)
     }
     
-    private dynamic func keyboardDidChangeFrame(notification: Notification) {
+    @objc private dynamic func keyboardDidChangeFrame(notification: Notification) {
         processKeyboardEvent(.didChangeFrame, notification: notification)
     }
     
