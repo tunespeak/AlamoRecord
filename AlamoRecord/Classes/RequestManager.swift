@@ -70,23 +70,25 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError>: NSObject {
     }
     
     /**
-         Makes a request to the given URL
-         - parameter method: The HTTP method
-         - parameter url: The URL that conforms to URLProtocol
-         - parameter parameters: The parameters. `nil` by default
-         - parameter encoding: The parameter encoding. `URLEncoding.default` by default
-         - parameter headers: The HTTP headers. `nil` by default
-         - parameter success: The block to execute if the request succeeds
-         - parameter failure: The block to execute if the request fails
+        Makes a request to the given URL
+        - parameter method: The HTTP method
+        - parameter url: The URL that conforms to URLProtocol
+        - parameter parameters: The parameters. `nil` by default
+        - parameter encoding: The parameter encoding. `URLEncoding.default` by default
+        - parameter headers: The HTTP headers. `nil` by default
+        - parameter emptyBody: Wether or not the response will have an empty body. `false` by default
+        - parameter success: The block to execute if the request succeeds
+        - parameter failure: The block to execute if the request fails
      */
     @discardableResult
     open func makeRequest(_ method: Alamofire.HTTPMethod,
-                            url: U,
-                            parameters: Parameters? = nil,
-                            encoding: ParameterEncoding = URLEncoding.default,
-                            headers: HTTPHeaders? = nil,
-                            success: (() -> Void)?,
-                            failure: ((E) -> Void)?) -> DataRequest {
+                          url: U,
+                          parameters: Parameters? = nil,
+                          encoding: ParameterEncoding = URLEncoding.default,
+                          headers: HTTPHeaders? = nil,
+                          emptyBody: Bool = false,
+                          success: (() -> Void)?,
+                          failure: ((E) -> Void)?) -> DataRequest {
         
         return makeRequest(method,
                            url: url,
@@ -94,13 +96,23 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError>: NSObject {
                            encoding: encoding,
                            headers: headers)
             .responseJSON { response in
-                            
+                
                 Logger.logFinishedResponse(response: response)
-                switch response.result {
-                case .success:
+                
+                guard emptyBody else {
+                    switch response.result {
+                    case .success:
+                        self.onSuccess(success: success, response: response)
+                    case .failure(let error):
+                        self.onFailure(error: error, response: response, failure: failure)
+                    }
+                    return
+                }
+                
+                if response.response!.statusCode >= 200 && response.response!.statusCode <= 299 {
                     self.onSuccess(success: success, response: response)
-                case .failure(let error):
-                    self.onFailure(error: error, response: response, failure: failure)
+                } else {
+                    self.onFailure(error: response.error!, response: response, failure: failure)
                 }
         }
         
