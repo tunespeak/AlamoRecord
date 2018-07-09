@@ -18,5 +18,5 @@ AlamoRecord is a powerful yet simple framework that eliminates the often complex
   s.watchos.deployment_target = '2.0'
 
   s.source_files = 'AlamoRecord/Classes/**/*'
-  s.dependency 'AlamofireObjectMapper', '~> 5.0'
+  s.dependency 'AlamofireObjectMapper', '~> 5.1'
 end

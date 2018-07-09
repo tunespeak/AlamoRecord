@@ -36,7 +36,7 @@ public class BaseNotificationBanner: UIView {
     
     /// The delegate of the notification banner
     public weak var delegate: NotificationBannerDelegate?
-    
+
     /// The height of the banner when it is presented
     public var bannerHeight: CGFloat {
         get {
@@ -85,6 +85,12 @@ public class BaseNotificationBanner: UIView {
     /// Closure that will be executed if the notification banner is swiped up
     public var onSwipeUp: (() -> Void)?
     
+    /// Responsible for positioning and auto managing notification banners
+    public var bannerQueue: NotificationBannerQueue = NotificationBannerQueue.default
+    
+    /// Banner dimiss animation duration
+    public var dismissDuration: TimeInterval = 0.5
+    
     /// Wether or not the notification banner is currently being displayed
     public private(set) var isDisplaying: Bool = false
 
@@ -105,9 +111,6 @@ public class BaseNotificationBanner: UIView {
     
     /// Used by the banner queue to determine wether a notification banner was placed in front of it in the queue
     var isSuspended: Bool = false
-    
-    /// Responsible for positioning and auto managing notification banners
-    private let bannerQueue: NotificationBannerQueue = NotificationBannerQueue.default
     
     /// The main window of the application which banner views are placed on
     private let appWindow: UIWindow = UIApplication.shared.delegate!.window!!
@@ -201,7 +204,7 @@ public class BaseNotificationBanner: UIView {
     private func updateSpacerViewHeight(make: ConstraintMaker? = nil) {
         let finalHeight = NotificationBannerUtilities.isiPhoneX()
             && UIApplication.shared.statusBarOrientation.isPortrait
-            && parentViewController == nil ? 40.0 : 10.0
+            && (parentViewController?.navigationController?.isNavigationBarHidden ?? true) ? 40.0 : 10.0
         if let make = make {
             make.height.equalTo(finalHeight)
         } else {
@@ -215,6 +218,11 @@ public class BaseNotificationBanner: UIView {
         Dismisses the NotificationBanner and shows the next one if there is one to show on the queue
     */
     @objc public func dismiss() {
+        
+        guard isDisplaying else {
+            return
+        }
+        
         NSObject.cancelPreviousPerformRequests(withTarget: self,
                                                selector: #selector(dismiss),
                                                object: nil)
@@ -222,7 +230,7 @@ public class BaseNotificationBanner: UIView {
         NotificationCenter.default.post(name: NotificationBanner.BannerWillDisappear, object: self, userInfo: notificationUserInfo)
         delegate?.notificationBannerWillDisappear(self)
         
-        UIView.animate(withDuration: 0.5, animations: {
+        UIView.animate(withDuration: dismissDuration, animations: {
             self.frame = self.bannerPositionFrame.startFrame
         }) { (completed) in
             self.removeFromSuperview()
@@ -243,14 +251,18 @@ public class BaseNotificationBanner: UIView {
         Places a NotificationBanner on the queue and shows it if its the first one in the queue
         - parameter queuePosition: The position to show the notification banner. If the position is .front, the
         banner will be displayed immediately
+        - parameter bannerPosition: The position the notification banner should slide in from
+        - parameter queue: The queue to display the notification banner on. It is up to the developer
+        to manage multiple banner queues and prevent any conflicts that may occur.
         - parameter viewController: The view controller to display the notifification banner on. If nil, it will
         be placed on the main app window
-        - parameter bannerPosition: The position the notification banner should slide in from
     */
     public func show(queuePosition: QueuePosition = .back,
                      bannerPosition: BannerPosition = .top,
+                     queue: NotificationBannerQueue = NotificationBannerQueue.default,
                      on viewController: UIViewController? = nil) {
         parentViewController = viewController
+        bannerQueue = queue
         show(placeOnQueue: true, queuePosition: queuePosition, bannerPosition: bannerPosition)
     }
     
@@ -264,6 +276,10 @@ public class BaseNotificationBanner: UIView {
     func show(placeOnQueue: Bool,
               queuePosition: QueuePosition = .back,
               bannerPosition: BannerPosition = .top) {
+        
+        guard !isDisplaying else {
+            return
+        }
         
         if bannerPositionFrame == nil {
             self.bannerPosition = bannerPosition
@@ -304,6 +320,8 @@ public class BaseNotificationBanner: UIView {
             NotificationCenter.default.post(name: NotificationBanner.BannerWillAppear, object: self, userInfo: notificationUserInfo)
             delegate?.notificationBannerWillAppear(self)
             
+            self.isDisplaying = true
+            
             UIView.animate(withDuration: 0.5,
                            delay: 0.0,
                            usingSpringWithDamping: 0.7,
@@ -317,7 +335,6 @@ public class BaseNotificationBanner: UIView {
                 NotificationCenter.default.post(name: NotificationBanner.BannerDidAppear, object: self, userInfo: self.notificationUserInfo)
                 self.delegate?.notificationBannerDidAppear(self)
                 
-                self.isDisplaying = true
                 let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.onTapGestureRecognizer))
                 self.addGestureRecognizer(tapGestureRecognizer)
                 
@@ -352,11 +369,17 @@ public class BaseNotificationBanner: UIView {
     }
     
     /**
-        Changes the frame of the notificaiton banner when the orientation of the device changes
+        Changes the frame of the notification banner when the orientation of the device changes
     */
     @objc private dynamic func onOrientationChanged() {
         updateSpacerViewHeight()
-        self.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: appWindow.frame.width, height: bannerHeight)
+        
+        let newY = (bannerPosition == .top) ? (frame.origin.y) : (appWindow.frame.height - bannerHeight)
+        frame = CGRect(x: frame.origin.x,
+                       y: newY,
+                       width: appWindow.frame.width,
+                       height: bannerHeight)
+    
         bannerPositionFrame = BannerPositionFrame(bannerPosition: bannerPosition,
                                                   bannerWidth: appWindow.frame.width,
                                                   bannerHeight: bannerHeight,
@@ -420,7 +443,7 @@ public class BaseNotificationBanner: UIView {
     internal func shouldAdjustForIphoneX() -> Bool {
         return NotificationBannerUtilities.isiPhoneX()
             && UIApplication.shared.statusBarOrientation.isPortrait
-            && parentViewController == nil
+            && (self.parentViewController?.navigationController?.isNavigationBarHidden ?? true)
     }
     /**
         Updates the scrolling marquee label duration
