@@ -19,6 +19,10 @@ class ApplicationError: AlamoRecordError {
         super.init(map: map)
     }
     
+    required public init?(coder aDecoder: NSCoder) {
+       super.init(coder: aDecoder)
+    }
+    
     override func mapping(map: Map) {
         super.mapping(map: map)
     }

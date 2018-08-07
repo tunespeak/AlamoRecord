@@ -18,7 +18,7 @@
 
 import ObjectMapper
 
-open class AlamoRecordError: NSObject, Mappable {
+open class AlamoRecordError: NSError, Mappable {
     
     override open var description: String {
         guard let nsError = nsError else {
@@ -31,12 +31,17 @@ open class AlamoRecordError: NSObject, Mappable {
     public var nsError: NSError?
     
     required public init(nsError: NSError) {
+        super.init(domain: nsError.domain, code: nsError.code, userInfo: nsError.userInfo)
         self.nsError = nsError
     }
     
     required public init?(map: Map) {
-        super.init()
+        super.init(domain: "", code: -1, userInfo: [:])
         mapping(map: map)
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
     
     open func mapping(map: Map) {}
