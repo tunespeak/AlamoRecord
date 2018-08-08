@@ -30,6 +30,10 @@ open class AlamoRecordError: NSError, Mappable {
     /// The error of the failed request
     public var nsError: NSError?
     
+    public required init() {
+        super.init(domain: "", code: -1, userInfo: [:])
+    }
+    
     required public init(nsError: NSError) {
         super.init(domain: nsError.domain, code: nsError.code, userInfo: nsError.userInfo)
         self.nsError = nsError
