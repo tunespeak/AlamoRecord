@@ -1,3 +1,5 @@
+![RxAlamoRecord](https://raw.githubusercontent.com/tunespeak/AlamoRecord/d89104bf456bfded4f0406b77488ab412ed223ce/AlamoRecord/Assets/alamorecord_banner.png)
+
 [![Version](https://img.shields.io/cocoapods/v/AlamoRecord.svg?style=flat)](http://cocoapods.org/pods/AlamoRecord)
 [![Platform](https://img.shields.io/cocoapods/p/AlamoRecord.svg?style=flat)](http://cocoapods.org/pods/AlamoRecord)
 <a href="https://developer.apple.com/swift"><img src="https://img.shields.io/badge/swift-4.2-4BC51D.svg?style=flat" alt="Language: Swift" /></a>
