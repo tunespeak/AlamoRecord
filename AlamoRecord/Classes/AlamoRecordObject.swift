@@ -20,23 +20,23 @@ import Alamofire
 import AlamofireObjectMapper
 import ObjectMapper
 
-open class AlamoRecordObject<U: URLProtocol, E: AlamoRecordError>: NSObject, Mappable {
+open class AlamoRecordObject<U: URLProtocol, E: AlamoRecordError, IDType>: NSObject, Mappable {
     
     /// Key to encode/decode the id variable
     private let idKey: String = "id"
     
     /// The RequestManager that is tied to all instances of this class
-    open class var requestManager: RequestManager<U, E> {
+    open class var requestManager: RequestManager<U, E, IDType> {
         fatalError("requestManager must be overriden in your AlamoRecordObject subclass")
     }
     
     /// The RequestManager that is tied to this instance
-    open var requestManager: RequestManager<U, E> {
+    open var requestManager: RequestManager<U, E, IDType> {
         return type(of: self).requestManager
     }
     
-    /// The id of this instance. This can be a String or an Int.
-    open var id: Any!
+    /// The id of this instance. This should be a String or an Int.
+    open var id: IDType!
     
     /// The root of all instances of this class. This is used when making URL's that relate to a component of this class.
     // Example: '/comment/id' --> '/\(Comment.root)/id'
@@ -188,7 +188,7 @@ open class AlamoRecordObject<U: URLProtocol, E: AlamoRecordError>: NSObject, Map
      - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    open class func find<T: AlamoRecordObject>(id: Any,
+    open class func find<T: AlamoRecordObject>(id: IDType,
                          parameters: Parameters? = nil,
                          encoding: ParameterEncoding = URLEncoding.default,
                          headers: HTTPHeaders? = nil,
@@ -237,7 +237,7 @@ open class AlamoRecordObject<U: URLProtocol, E: AlamoRecordError>: NSObject, Map
         - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    open class func update<T: AlamoRecordObject>(id: Any,
+    open class func update<T: AlamoRecordObject>(id: IDType,
                       parameters: Parameters? = nil,
                       encoding: ParameterEncoding = URLEncoding.default,
                       headers: HTTPHeaders? = nil,
@@ -263,7 +263,7 @@ open class AlamoRecordObject<U: URLProtocol, E: AlamoRecordError>: NSObject, Map
          - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    open class func update(id: Any,
+    open class func update(id: IDType,
                            parameters: Parameters? = nil,
                            encoding: ParameterEncoding = URLEncoding.default,
                            headers: HTTPHeaders? = nil,
@@ -335,7 +335,7 @@ open class AlamoRecordObject<U: URLProtocol, E: AlamoRecordError>: NSObject, Map
         - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    open class func destroy(id: Any,
+    open class func destroy(id: IDType,
                       parameters: Parameters? = nil,
                       encoding: ParameterEncoding = URLEncoding.default,
                       headers: HTTPHeaders? = nil,
@@ -365,7 +365,7 @@ open class AlamoRecordObject<U: URLProtocol, E: AlamoRecordError>: NSObject, Map
         The URL to use when making a find request for all objects of this instance
         - parameter id: The id of the object to find
      */
-    open class func urlForFind(_ id: Any) -> U {
+    open class func urlForFind(_ id: IDType) -> U {
         return U(url: "\(pluralRoot)/\(id)")
     }
     
@@ -377,7 +377,7 @@ open class AlamoRecordObject<U: URLProtocol, E: AlamoRecordError>: NSObject, Map
         The URL to use when making an update request for all objects of this instance
         - parameter id: The id of the object to update
      */
-    open class func urlForUpdate(_ id: Any) -> U {
+    open class func urlForUpdate(_ id: IDType) -> U {
         return U(url: "\(pluralRoot)/\(id)")
     }
     
@@ -389,7 +389,7 @@ open class AlamoRecordObject<U: URLProtocol, E: AlamoRecordError>: NSObject, Map
         The URL to use when making a destroy request for all objects this instance
         - parameter id: The id of the object to destroy
      */
-    open class func urlForDestroy(_ id: Any) -> U {
+    open class func urlForDestroy(_ id: IDType) -> U {
         return U(url: "\(pluralRoot)/\(id)")
     }
     

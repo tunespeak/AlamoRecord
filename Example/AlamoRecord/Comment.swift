@@ -9,9 +9,9 @@
 import ObjectMapper
 import UIKit
 
-class Comment: AlamoRecordObject<ApplicationURL, ApplicationError> {
+class Comment: AlamoRecordObject<ApplicationURL, ApplicationError, Int> {
 
-    class override var requestManager: RequestManager<ApplicationURL, ApplicationError> {
+    class override var requestManager: ApplicationRequestManager {
         return ApplicationRequestManager.default
     }
     

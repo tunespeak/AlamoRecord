@@ -12,8 +12,8 @@ AlamoRecord is a powerful yet simple framework that eliminates the often complex
 ## Requirements
 
 - iOS 9.0+ / macOS 10.11+ / tvOS 9.0+ / watchOS 2.0+
-- Xcode 9.0+
-- Swift 4.0+
+- Xcode 10.0+
+- Swift 4.2+
 
 ## Installation
 
@@ -113,8 +113,9 @@ We next need to create an instance of a `RequestManager` and pass in the `Applic
 #### `ApplicationRequestManager`
 
 ```swift
-class ApplicationRequestManager: RequestManager<ApplicationURL, ApplicationError> {
-   
+// IDType should be of type String or Int
+class ApplicationRequestManager: RequestManager<ApplicationURL, ApplicationError, IDType> {
+   	
     static var `default`: ApplicationRequestManager = ApplicationRequestManager()
     
     init() {
@@ -131,9 +132,10 @@ The final step is to create data objects inheriting from `AlamoRecordObject` tha
 #### `Post`
 
 ```swift
-class Post: AlamoRecordObject<ApplicationURL, ApplicationError> {
+// IDType should be of type String or Int
+class Post: AlamoRecordObject<ApplicationURL, ApplicationError, IDType> {
     
-    override class var requestManager: RequestManager<ApplicationURL, ApplicationError> {
+    override class var requestManager: RequestManager<ApplicationURL, ApplicationError, IDType> {
         return ApplicationRequestManager
     }
     

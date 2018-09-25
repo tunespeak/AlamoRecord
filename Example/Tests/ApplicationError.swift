@@ -23,6 +23,10 @@ class ApplicationError: AlamoRecordError {
        super.init(coder: aDecoder)
     }
     
+    public required init() {
+        fatalError("init() has not been implemented")
+    }
+    
     override func mapping(map: Map) {
         super.mapping(map: map)
     }

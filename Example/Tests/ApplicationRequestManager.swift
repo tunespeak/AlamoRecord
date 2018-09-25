@@ -8,7 +8,7 @@
 
 import AlamoRecord
 
-class ApplicationRequestManager: RequestManager<ApplicationURL, ApplicationError> {
+class ApplicationRequestManager: RequestManager<ApplicationURL, ApplicationError, Int> {
    
     static var `default`: ApplicationRequestManager = ApplicationRequestManager()
     

@@ -20,7 +20,7 @@ import Alamofire
 import AlamofireObjectMapper
 import ObjectMapper
 
-open class RequestManager<U: URLProtocol, E: AlamoRecordError>: NSObject {
+open class RequestManager<U: URLProtocol, E: AlamoRecordError, IDType>: NSObject {
     
     public typealias Parameters = [String: Any]
     
@@ -205,7 +205,7 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError>: NSObject {
          - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    public func findObject<T: AlamoRecordObject<U, E>>(id: Any,
+    public func findObject<T: AlamoRecordObject<U, E, IDType>>(id: IDType,
                           parameters: Parameters? = nil,
                           keyPath: String? = nil,
                           encoding: ParameterEncoding = URLEncoding.default,
@@ -233,7 +233,7 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError>: NSObject {
          - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    public func findObject<T: AlamoRecordObject<U, E>>(url: U,
+    public func findObject<T: AlamoRecordObject<U, E, IDType>>(url: U,
                                  parameters: Parameters? = nil,
                                  keyPath: String? = nil,
                                  encoding: ParameterEncoding = URLEncoding.default,
@@ -290,7 +290,7 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError>: NSObject {
          - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    public func createObject<T: AlamoRecordObject<U, E>>(parameters: Parameters? = nil,
+    public func createObject<T: AlamoRecordObject<U, E, IDType>>(parameters: Parameters? = nil,
                             keyPath: String? = nil,
                             encoding: ParameterEncoding = URLEncoding.default,
                             headers: HTTPHeaders? = nil,
@@ -317,7 +317,7 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError>: NSObject {
          - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    public func createObject<T: AlamoRecordObject<U, E>>(url: U,
+    public func createObject<T: AlamoRecordObject<U, E, IDType>>(url: U,
                                    parameters: Parameters? = nil,
                                    keyPath: String? = nil,
                                    encoding: ParameterEncoding = URLEncoding.default,
@@ -371,7 +371,7 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError>: NSObject {
          - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    public func updateObject<T: AlamoRecordObject<U, E>>(id: Any,
+    public func updateObject<T: AlamoRecordObject<U, E, IDType>>(id: IDType,
                                  parameters: Parameters? = nil,
                                  keyPath: String? = nil,
                                  encoding: ParameterEncoding = URLEncoding.default,
@@ -399,7 +399,7 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError>: NSObject {
          - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    public func updateObject<T: AlamoRecordObject<U, E>>(url: U,
+    public func updateObject<T: AlamoRecordObject<U, E, IDType>>(url: U,
                                  parameters: Parameters? = nil,
                                  keyPath: String? = nil,
                                  encoding: ParameterEncoding = URLEncoding.default,

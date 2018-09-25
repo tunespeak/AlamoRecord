@@ -55,7 +55,7 @@ class Logger: NSObject {
             let statusCode = responseObject.statusCode
             let statusCodeString = statusCodeStrings[statusCode]
             let duration = String(response.timeline.totalDuration)
-            let trimmedDuration = duration.substring(to: duration.index(duration.startIndex, offsetBy: 4))
+            let trimmedDuration = String(duration[duration.startIndex..<duration.index(duration.startIndex, offsetBy: 4)])
             print("\(emoji(for: statusCode)) \(loggerPrefix) \(method) \(urlString) (\(statusCode) \(statusCodeString!)) \(trimmedDuration) seconds")            
         }
     }

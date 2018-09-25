@@ -9,9 +9,9 @@
 import AlamoRecord
 import ObjectMapper
 
-class Post: AlamoRecordObject<ApplicationURL, ApplicationError> {
+class Post: AlamoRecordObject<ApplicationURL, ApplicationError, Int> {
     
-    override class var requestManager: RequestManager<ApplicationURL, ApplicationError> {
+    override class var requestManager: ApplicationRequestManager {
         return ApplicationRequestManager.default
     }
     
