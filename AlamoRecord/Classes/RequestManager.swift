@@ -20,7 +20,7 @@ import Alamofire
 import AlamofireObjectMapper
 import ObjectMapper
 
-open class RequestManager<U: URLProtocol, E: AlamoRecordError, IDType>: NSObject {
+open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObject {
     
     public typealias Parameters = [String: Any]
     
@@ -48,7 +48,7 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError, IDType>: NSObject
     /**
         Makes a request to the given URL. Each request goes through this method first.
         - parameter method: The HTTP method
-        - parameter url: The URL that conforms to URLProtocol
+        - parameter url: The URL that conforms to AlamoRecordURL
         - parameter parameters: The parameters. `nil` by default
         - parameter encoding: The parameter encoding. `URLEncoding.default` by default
         - parameter headers: The HTTP headers. `nil` by default
@@ -72,7 +72,7 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError, IDType>: NSObject
     /**
         Makes a request to the given URL
         - parameter method: The HTTP method
-        - parameter url: The URL that conforms to URLProtocol
+        - parameter url: The URL that conforms to AlamoRecordURL
         - parameter parameters: The parameters. `nil` by default
         - parameter encoding: The parameter encoding. `URLEncoding.default` by default
         - parameter headers: The HTTP headers. `nil` by default
@@ -121,7 +121,7 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError, IDType>: NSObject
     /**
          Makes a request and maps an object that conforms to the Mappable protocol
          - parameter method: The HTTP method
-         - parameter url: The URL that conforms to URLProtocol
+         - parameter url: The URL that conforms to AlamoRecordURL
          - parameter parameters: The parameters. `nil` by default
          - parameter keyPath: The keyPath to use when deserializing the JSON. `nil` by default.
          - parameter encoding: The parameter encoding. `URLEncoding.default` by default.
@@ -159,7 +159,7 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError, IDType>: NSObject
     /**
          Makes a request and maps an array of objects that conform to the Mappable protocol
          - parameter method: The HTTP method
-         - parameter url: The URL that conforms to URLProtocol
+         - parameter url: The URL that conforms to AlamoRecordURL
          - parameter parameters: The parameters. `nil` by default
          - parameter keyPath: The keyPath to use when deserializing the JSON. `nil` by default.
          - parameter encoding: The parameter encoding. `URLEncoding.default` by default.
@@ -224,7 +224,7 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError, IDType>: NSObject
     
     /**
          Makes a request and maps an AlamoRecordObject
-         - parameter url: The URL that conforms to URLProtocol
+         - parameter url: The URL that conforms to AlamoRecordURL
          - parameter parameters: The parameters. `nil` by default
          - parameter keyPath: The keyPath to use when deserializing the JSON. `nil` by default.
          - parameter encoding: The parameter encoding. `URLEncoding.default` by default.
@@ -253,7 +253,7 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError, IDType>: NSObject
     
     /**
          Makes a request and maps an array of AlamoRecordObjects
-         - parameter url: The URL that conforms to URLProtocol
+         - parameter url: The URL that conforms to AlamoRecordURL
          - parameter parameters: The parameters. `nil` by default
          - parameter keyPath: The keyPath to use when deserializing the JSON. `nil` by default.
          - parameter encoding: The parameter encoding. `URLEncoding.default` by default.
@@ -308,7 +308,7 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError, IDType>: NSObject
 
     /**
          Makes a request and creates an AlamoRecordObject
-         - paramter url: The URL that conforms to URLProtocol
+         - paramter url: The URL that conforms to AlamoRecordURL
          - parameter parameters: The parameters. `nil` by default
          - parameter keyPath: The keyPath to use when deserializing the JSON. `nil` by default.
          - parameter encoding: The parameter encoding. `URLEncoding.default` by default.
@@ -390,7 +390,7 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError, IDType>: NSObject
     
     /**
          Makes a request and updates an AlamoRecordObject
-         - parameter url: The URL that conforms to URLProtocol
+         - parameter url: The URL that conforms to AlamoRecordURL
          - parameter parameters: The parameters. `nil` by default
          - parameter keyPath: The keyPath to use when deserializing the JSON. `nil` by default.
          - parameter encoding: The parameter encoding. `URLEncoding.default` by default.
@@ -419,7 +419,7 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError, IDType>: NSObject
     
     /**
      Makes a request and updates an AlamoRecordObject
-     - parameter url: The URL that conforms to URLProtocol
+     - parameter url: The URL that conforms to AlamoRecordURL
      - parameter parameters: The parameters. `nil` by default
      - parameter keyPath: The keyPath to use when deserializing the JSON. `nil` by default.
      - parameter encoding: The parameter encoding. `URLEncoding.default` by default.
@@ -446,7 +446,7 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError, IDType>: NSObject
     
     /**
          Makes a request and destroys an AlamoRecordObject
-         - parameter url: The URL that conforms to URLProtocol
+         - parameter url: The URL that conforms to AlamoRecordURL
          - parameter parameters: The parameters. `nil` by default
          - parameter encoding: The parameter encoding. `URLEncoding.default` by default.
          - parameter headers: The HTTP headers. `nil` by default.
@@ -473,7 +473,7 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError, IDType>: NSObject
     
     /**
      Makes an upload request
-     - parameter url: The URL that conforms to URLProtocol
+     - parameter url: The URL that conforms to AlamoRecordURL
      - parameter keyPath: The keyPath to use when deserializing the JSON. `nil` by default.
      - parameter headers: The HTTP headers. `nil` by default.
      - parameter multipartFormData: The data to append
@@ -511,7 +511,7 @@ open class RequestManager<U: URLProtocol, E: AlamoRecordError, IDType>: NSObject
     
     /**
          Makes a download request
-         - parameter url: The URL that conforms to URLProtocol
+         - parameter url: The URL that conforms to AlamoRecordURL
          - parameter destination: The destination to download the file to. If it is nil, then a default one will be assigned.
          - parameter progress: The progress handler of the download request
          - parameter success: The block to execute if the request succeeds

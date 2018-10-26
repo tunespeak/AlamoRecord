@@ -28,13 +28,14 @@
 		5C94C3061F08707F00762CFC /* RequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C94C2F81F08707F00762CFC /* RequestManager.swift */; };
 		5C94C3081F08707F00762CFC /* RequestObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C94C2F91F08707F00762CFC /* RequestObserver.swift */; };
 		5C94C30A1F08707F00762CFC /* StatusCodeObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C94C2FA1F08707F00762CFC /* StatusCodeObserver.swift */; };
-		5C94C30C1F08707F00762CFC /* URLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C94C2FB1F08707F00762CFC /* URLProtocol.swift */; };
 		5C96D98D1F0ECC39005FF25E /* PostsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C96D98C1F0ECC39005FF25E /* PostsModel.swift */; };
 		5C96D98F1F0ECC43005FF25E /* PostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C96D98E1F0ECC43005FF25E /* PostsView.swift */; };
 		5C96D9911F0ECC4E005FF25E /* PostsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C96D9901F0ECC4E005FF25E /* PostsViewController.swift */; };
 		5C96D9931F0ED260005FF25E /* PostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C96D9921F0ED260005FF25E /* PostCell.swift */; };
 		5C96D9951F0ED316005FF25E /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C96D9941F0ED316005FF25E /* BaseTableViewCell.swift */; };
 		5C96D9971F0EDB71005FF25E /* ColorsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C96D9961F0EDB71005FF25E /* ColorsExtension.swift */; };
+		5CA0A94F21825DA3002BA69A /* AlamoRecordURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA0A94E21825DA3002BA69A /* AlamoRecordURL.swift */; };
+		5CA0A95021825DA3002BA69A /* AlamoRecordURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA0A94E21825DA3002BA69A /* AlamoRecordURL.swift */; };
 		5CCB20951F17064E0027BA56 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE6C8151F102C5200965235 /* Comment.swift */; };
 		5CCB20961F1706880027BA56 /* AlamoRecordError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C86407E1F09D5E6001E8320 /* AlamoRecordError.swift */; };
 		5CCB20971F1706880027BA56 /* AlamoRecordObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C94C2F31F08707F00762CFC /* AlamoRecordObject.swift */; };
@@ -44,7 +45,6 @@
 		5CCB209B1F1706880027BA56 /* RequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C94C2F81F08707F00762CFC /* RequestManager.swift */; };
 		5CCB209C1F1706880027BA56 /* RequestObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C94C2F91F08707F00762CFC /* RequestObserver.swift */; };
 		5CCB209D1F1706880027BA56 /* StatusCodeObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C94C2FA1F08707F00762CFC /* StatusCodeObserver.swift */; };
-		5CCB209E1F1706880027BA56 /* URLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C94C2FB1F08707F00762CFC /* URLProtocol.swift */; };
 		5CE6C8101F102B6900965235 /* CommentsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE6C80F1F102B6900965235 /* CommentsModel.swift */; };
 		5CE6C8121F102B7E00965235 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE6C8111F102B7E00965235 /* CommentsViewController.swift */; };
 		5CE6C8141F102B8F00965235 /* CommentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE6C8131F102B8F00965235 /* CommentsView.swift */; };
@@ -90,13 +90,13 @@
 		5C94C2F81F08707F00762CFC /* RequestManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RequestManager.swift; path = ../../AlamoRecord/Classes/RequestManager.swift; sourceTree = "<group>"; };
 		5C94C2F91F08707F00762CFC /* RequestObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RequestObserver.swift; path = ../../AlamoRecord/Classes/RequestObserver.swift; sourceTree = "<group>"; };
 		5C94C2FA1F08707F00762CFC /* StatusCodeObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusCodeObserver.swift; path = ../../AlamoRecord/Classes/StatusCodeObserver.swift; sourceTree = "<group>"; };
-		5C94C2FB1F08707F00762CFC /* URLProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = URLProtocol.swift; path = ../../AlamoRecord/Classes/URLProtocol.swift; sourceTree = "<group>"; };
 		5C96D98C1F0ECC39005FF25E /* PostsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostsModel.swift; sourceTree = "<group>"; };
 		5C96D98E1F0ECC43005FF25E /* PostsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostsView.swift; sourceTree = "<group>"; };
 		5C96D9901F0ECC4E005FF25E /* PostsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostsViewController.swift; sourceTree = "<group>"; };
 		5C96D9921F0ED260005FF25E /* PostCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostCell.swift; sourceTree = "<group>"; };
 		5C96D9941F0ED316005FF25E /* BaseTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
 		5C96D9961F0EDB71005FF25E /* ColorsExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorsExtension.swift; sourceTree = "<group>"; };
+		5CA0A94E21825DA3002BA69A /* AlamoRecordURL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AlamoRecordURL.swift; path = ../../AlamoRecord/Classes/AlamoRecordURL.swift; sourceTree = "<group>"; };
 		5CE6C80F1F102B6900965235 /* CommentsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsModel.swift; sourceTree = "<group>"; };
 		5CE6C8111F102B7E00965235 /* CommentsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsViewController.swift; sourceTree = "<group>"; };
 		5CE6C8131F102B8F00965235 /* CommentsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsView.swift; sourceTree = "<group>"; };
@@ -207,13 +207,13 @@
 			children = (
 				5C86407E1F09D5E6001E8320 /* AlamoRecordError.swift */,
 				5C94C2F31F08707F00762CFC /* AlamoRecordObject.swift */,
+				5CA0A94E21825DA3002BA69A /* AlamoRecordURL.swift */,
 				5C94C2F41F08707F00762CFC /* Configuration.swift */,
 				5C94C2F51F08707F00762CFC /* ErrorParser.swift */,
 				5C94C2F71F08707F00762CFC /* Logger.swift */,
 				5C94C2F81F08707F00762CFC /* RequestManager.swift */,
 				5C94C2F91F08707F00762CFC /* RequestObserver.swift */,
 				5C94C2FA1F08707F00762CFC /* StatusCodeObserver.swift */,
-				5C94C2FB1F08707F00762CFC /* URLProtocol.swift */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -499,8 +499,8 @@
 				5C6347081F0B088200158A80 /* AlamoRecordTests.swift in Sources */,
 				5CCB20991F1706880027BA56 /* ErrorParser.swift in Sources */,
 				5C63470D1F0B09B900158A80 /* ApplicationRequestManager.swift in Sources */,
+				5CA0A95021825DA3002BA69A /* AlamoRecordURL.swift in Sources */,
 				5CCB20961F1706880027BA56 /* AlamoRecordError.swift in Sources */,
-				5CCB209E1F1706880027BA56 /* URLProtocol.swift in Sources */,
 				5C6347091F0B088200158A80 /* Post.swift in Sources */,
 				5C63470A1F0B088200158A80 /* ApplicationURL.swift in Sources */,
 			);
@@ -510,7 +510,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5C94C30C1F08707F00762CFC /* URLProtocol.swift in Sources */,
 				5C94C2FE1F08707F00762CFC /* Configuration.swift in Sources */,
 				5CE6C8121F102B7E00965235 /* CommentsViewController.swift in Sources */,
 				5C6347161F0B3D3E00158A80 /* ApplicationRequestManager.swift in Sources */,
@@ -522,6 +521,7 @@
 				5C94C3041F08707F00762CFC /* Logger.swift in Sources */,
 				5C96D98D1F0ECC39005FF25E /* PostsModel.swift in Sources */,
 				5C6347151F0B3D3E00158A80 /* ApplicationError.swift in Sources */,
+				5CA0A94F21825DA3002BA69A /* AlamoRecordURL.swift in Sources */,
 				5C6347141F0B3D3E00158A80 /* Post.swift in Sources */,
 				5CE6C8141F102B8F00965235 /* CommentsView.swift in Sources */,
 				5C4141961F12CE7800A18674 /* CreatePostView.swift in Sources */,

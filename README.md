@@ -35,7 +35,7 @@ These are data objects that are retrieved from an API. All data objects that inh
 ### `RequestManager`
 These are the work horses of AlamoRecord. They contain all of the networking helpers that AlamoRecord needs in order to create your application's networking layer. They are responsible for each request that your `AlamoRecordObject`'s make. They also contain upload and download helpers.
 
-### `URLProtocol`
+### `AlamoRecordURL`
 These store all of the information needed in order to make a proper request through instances of `RequestManager`'s.
 
 ### `AlamoRecordError`
@@ -46,12 +46,12 @@ These are errors that are returned from an API. On a failed request, the JSON re
 Let's assume we are developing an application that allows user's to interact with each other via posts.
 
 ### Step 1
-We first need to create a class that conforms to `URLProtocol`. Let's name it `ApplicationURL`:
+We first need to create a class that conforms to `AlamoRecordURL`. Let's name it `ApplicationURL`:
 
 #### `ApplicationURL`
 
 ```swift
-class ApplicationURL: AlamoRecord.URLProtocol {
+class ApplicationURL: AlamoRecordURL {
 
     var absolute: String {
         return "https://jsonplaceholder.typicode.com/\(url)"
@@ -65,7 +65,7 @@ class ApplicationURL: AlamoRecord.URLProtocol {
 }
 
 ```
-Notice how you only need to pass the path and not the domain to each instance that conforms to `URLProtocol`. That's because you set the domain of each instance in the `absolute` variable. 
+Notice how you only need to pass the path and not the domain to each instance that conforms to `AlamoRecordURL`. That's because you set the domain of each instance in the `absolute` variable. 
 
 ### Step 2
 

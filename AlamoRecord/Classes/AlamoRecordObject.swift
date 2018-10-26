@@ -20,7 +20,7 @@ import Alamofire
 import AlamofireObjectMapper
 import ObjectMapper
 
-open class AlamoRecordObject<U: URLProtocol, E: AlamoRecordError, IDType>: NSObject, Mappable {
+open class AlamoRecordObject<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObject, Mappable {
     
     /// Key to encode/decode the id variable
     private let idKey: String = "id"
