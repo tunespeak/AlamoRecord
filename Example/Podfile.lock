@@ -1,17 +1,17 @@
 PODS:
-  - Alamofire (4.7.3)
+  - Alamofire (4.8.2)
   - AlamofireObjectMapper (5.1.0):
     - Alamofire (~> 4.1)
     - ObjectMapper (~> 3.3)
-  - AlamoRecord (1.1.1):
-    - AlamofireObjectMapper (~> 5.1)
+  - AlamoRecord (1.4.0):
+    - AlamofireObjectMapper (= 5.1.0)
   - KeyboardSpy (1.1)
-  - MarqueeLabel/Swift (3.1.6)
-  - NotificationBannerSwift (1.6.3):
-    - MarqueeLabel/Swift
-    - SnapKit (~> 4.0)
-  - ObjectMapper (3.3.0)
-  - SnapKit (4.0.0)
+  - MarqueeLabel (4.0.0)
+  - NotificationBannerSwift (2.2.0):
+    - MarqueeLabel (~> 4.0.0)
+    - SnapKit (~> 5.0.0)
+  - ObjectMapper (3.4.2)
+  - SnapKit (5.0.0)
 
 DEPENDENCIES:
   - AlamoRecord (from `../`)
@@ -34,15 +34,15 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
+  Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
   AlamofireObjectMapper: 3395e698901d8b0e6f48b7d0c43bd47875325102
-  AlamoRecord: 4bf44f30cb7203de4298ef203a287663dc7c87bc
+  AlamoRecord: f7ff85c04c4637a1d3ceb916bb079e1e2311f232
   KeyboardSpy: 4552ddd413d3b856b3b396422fccb8e1b3008524
-  MarqueeLabel: 0c41f08ef5773e29c0f71064a8fa788a2fd8b365
-  NotificationBannerSwift: b231e4c3244848ef300e1c53ce027b9756b9b06f
-  ObjectMapper: b612bf8c8e99c4dc0bb6013a51f7c27966ed5da9
-  SnapKit: a42d492c16e80209130a3379f73596c3454b7694
+  MarqueeLabel: b55b26e690b6ad41faedd95cbf5eae6f1d1735b4
+  NotificationBannerSwift: 0ebb4b35e18c0515fdfe01b5ebd90c3eb1255e3d
+  ObjectMapper: 0d4402610f4e468903ae64629eec4784531e5c51
+  SnapKit: fd22d10eb9aff484d79a8724eab922c1ddf89bcf
 
-PODFILE CHECKSUM: 3f63a2fa4d48882e49f031da151d69b53b92a842
+PODFILE CHECKSUM: f5d73d86856e49073d0206d4e3f83582b8a8a64b
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.6.1

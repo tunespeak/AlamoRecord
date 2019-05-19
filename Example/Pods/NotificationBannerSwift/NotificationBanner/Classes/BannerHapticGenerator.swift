@@ -1,7 +1,7 @@
 /*
  
  The MIT License (MIT)
- Copyright (c) 2017 Dalton Hinterscher
+ Copyright (c) 2017-2018 Dalton Hinterscher
  
  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
  to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
@@ -23,6 +23,16 @@ public enum BannerHaptic {
     case medium
     case heavy
     case none
+
+    @available(iOS 10.0, *)
+    var impactStyle: UIImpactFeedbackGenerator.FeedbackStyle? {
+        switch self {
+        case .light: return .light
+        case .medium: return .medium
+        case .heavy: return .heavy
+        case .none: return nil
+        }
+    }
 }
 
 open class BannerHapticGenerator: NSObject {
@@ -32,24 +42,12 @@ open class BannerHapticGenerator: NSObject {
         -parameter haptic: The haptic strength to generate when a banner is shown
      */
     open class func generate(_ haptic: BannerHaptic) {
-        
-        var style: UIImpactFeedbackStyle!
-        
-        switch haptic {
-        case .light:
-            style = .light
-        case .medium:
-            style = .medium
-        case .heavy:
-            style = .heavy
-        case .none:
-            return
-        }
-        
         if #available(iOS 10.0, *) {
-            let feedbackGenerator = UIImpactFeedbackGenerator(style: style)
-            feedbackGenerator.prepare()
-            feedbackGenerator.impactOccurred()
+            if let style = haptic.impactStyle {
+                let feedbackGenerator = UIImpactFeedbackGenerator(style: style)
+                feedbackGenerator.prepare()
+                feedbackGenerator.impactOccurred()
+            }
         }
     }
 }

@@ -2,18 +2,18 @@
 
 [![Version](https://img.shields.io/cocoapods/v/AlamoRecord.svg?style=flat)](http://cocoapods.org/pods/AlamoRecord)
 [![Platform](https://img.shields.io/cocoapods/p/AlamoRecord.svg?style=flat)](http://cocoapods.org/pods/AlamoRecord)
-<a href="https://developer.apple.com/swift"><img src="https://img.shields.io/badge/swift-4.2-4BC51D.svg?style=flat" alt="Language: Swift" /></a>
+<a href="https://developer.apple.com/swift"><img src="https://img.shields.io/badge/swift-5-4BC51D.svg?style=flat" alt="Language: Swift" /></a>
 [![License](https://img.shields.io/cocoapods/l/AlamoRecord.svg?style=flat)](http://cocoapods.org/pods/AlamoRecord)
 
-## Written in Swift 4.2
+## Written in Swift 5
 
 AlamoRecord is a powerful yet simple framework that eliminates the often complex networking layer that exists between your networking framework and your application. AlamoRecord uses the power of [AlamoFire](https://github.com/Alamofire/Alamofire), [AlamofireObjectMapper](https://github.com/tristanhimmelman/AlamofireObjectMapper) and the concepts behind the [ActiveRecord](http://guides.rubyonrails.org/active_record_basics.html) pattern to create a networking layer that makes interacting with your API easier than ever.
 
 ## Requirements
 
-- iOS 9.0+ / macOS 10.11+ / tvOS 9.0+ / watchOS 2.0+
-- Xcode 10.0+
-- Swift 4.2+
+- iOS 10.0+ / macOS 10.12+ / tvOS 10.0+ / watchOS 3.0+
+- Xcode 10.2+
+- Swift 5
 
 ## Installation
 
