@@ -18,7 +18,7 @@
 
 import Alamofire
 
-open class AlamoRecordObject<U: AlamoRecordURL, E: AlamoRecordError, IDType: Codable>: Codable {
+open class AlamoRecordObject<U: AlamoRecordURL, E: AlamoRecordError, IDType: Codable>: NSObject, Codable {
     
     /// The id of this instance. This should be a String or an Int.
     public let id: IDType

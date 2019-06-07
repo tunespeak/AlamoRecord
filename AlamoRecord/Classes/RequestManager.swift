@@ -18,7 +18,7 @@
 
 import Alamofire
 
-open class RequestManager<Url: AlamoRecordURL, ARError: AlamoRecordError, IDType: Codable> {
+open class RequestManager<Url: AlamoRecordURL, ARError: AlamoRecordError, IDType: Codable>: NSObject {
     
     public typealias Parameters = [String: Any]
     public typealias ARObject = AlamoRecordObject<Url, ARError, IDType>

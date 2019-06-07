@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'AlamoRecord'
-  s.version          = '2.0.0'
+  s.version          = '2.0.1'
   s.summary          = 'An elegant Alamofire wrapper inspired by ActiveRecord.'
   s.description      = <<-DESC
 AlamoRecord is a powerful yet simple framework that eliminates the often complex networking layer that exists between your networking framework and your application. AlamoRecord uses the power of AlamoFire, AlamofireObjectMapper and the concepts behind the ActiveRecord pattern to create a networking layer that makes interacting with your API easier than ever.
