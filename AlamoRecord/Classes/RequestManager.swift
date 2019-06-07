@@ -17,12 +17,11 @@
  */
 
 import Alamofire
-import AlamofireObjectMapper
-import ObjectMapper
 
-open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObject {
+open class RequestManager<Url: AlamoRecordURL, ARError: AlamoRecordError, IDType: Codable> {
     
     public typealias Parameters = [String: Any]
+    public typealias ARObject = AlamoRecordObject<Url, ARError, IDType>
     
     /// If enabled, each request will be logged to the console
     public var loggingEnabled: Bool = true {
@@ -32,17 +31,16 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
     }
     
     /// The configuration object of the RequestManager
-    public var configuration: Configuration!
+    public let configuration: Configuration
     
     /// Responsible for creating and managing `Request` objects, as well as their underlying `NSURLSession`.
-    public var sessionManager: Alamofire.SessionManager!
+    public let session: Session
     
     public init(configuration: Configuration) {
         self.configuration = configuration
-        sessionManager = Alamofire.SessionManager(configuration: configuration.urlSessionConfiguration)
-        sessionManager.startRequestsImmediately = true
-        sessionManager.retrier = configuration.requestRetrier
-        sessionManager.adapter = configuration.requestAdapter
+        session = Session(configuration: configuration.urlSessionConfiguration,
+                          startRequestsImmediately: true,
+                          interceptor: configuration.requestInterceptor)
     }
     
     /**
@@ -50,22 +48,22 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
         - parameter method: The HTTP method
         - parameter url: The URL that conforms to AlamoRecordURL
         - parameter parameters: The parameters. `nil` by default
-        - parameter encoding: The parameter encoding. `URLEncoding.default` by default
+        - parameter encoding: The parameter encoding. `JSONEncoding.default` by default
         - parameter headers: The HTTP headers. `nil` by default
      */
     @discardableResult
     open func makeRequest(_ method: Alamofire.HTTPMethod,
-                              url: U,
-                              parameters: Parameters? = nil,
-                              encoding: ParameterEncoding = URLEncoding.default,
-                              headers: HTTPHeaders? = nil) -> DataRequest {
+                          url: Url,
+                          parameters: Parameters? = nil,
+                          encoding: ParameterEncoding = JSONEncoding.default,
+                          headers: HTTPHeaders? = nil) -> DataRequest {
   
-        let request = sessionManager.request(url.absolute,
-                                             method: method,
-                                             parameters: parameters,
-                                             encoding: encoding,
-                                             headers: headers).validate()
-        Logger.logRequest(request: request)
+        let request = session.request(url.absolute,
+                                      method: method,
+                                      parameters: parameters,
+                                      encoding: encoding,
+                                      headers: headers).validate()
+        Logger.logRequest(method, url: url.absolute)
         return request
     }
     
@@ -74,7 +72,7 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
         - parameter method: The HTTP method
         - parameter url: The URL that conforms to AlamoRecordURL
         - parameter parameters: The parameters. `nil` by default
-        - parameter encoding: The parameter encoding. `URLEncoding.default` by default
+        - parameter encoding: The parameter encoding. `JSONEncoding.default` by default
         - parameter headers: The HTTP headers. `nil` by default
         - parameter emptyBody: Wether or not the response will have an empty body. `false` by default
         - parameter success: The block to execute if the request succeeds
@@ -82,13 +80,13 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
      */
     @discardableResult
     open func makeRequest(_ method: Alamofire.HTTPMethod,
-                          url: U,
+                          url: Url,
                           parameters: Parameters? = nil,
-                          encoding: ParameterEncoding = URLEncoding.default,
+                          encoding: ParameterEncoding = JSONEncoding.default,
                           headers: HTTPHeaders? = nil,
                           emptyBody: Bool = false,
                           success: (() -> Void)?,
-                          failure: ((E) -> Void)?) -> DataRequest {
+                          failure: ((ARError) -> Void)?) -> DataRequest {
         
         return makeRequest(method,
                            url: url,
@@ -109,7 +107,7 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
                     return
                 }
                 
-                if response.response!.statusCode >= 200 && response.response!.statusCode <= 299 {
+                if (200...299).contains(response.response?.statusCode ?? 0) {
                     self.onSuccess(success: success, response: response)
                 } else {
                     self.onFailure(error: response.error!, response: response, failure: failure)
@@ -124,32 +122,32 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
          - parameter url: The URL that conforms to AlamoRecordURL
          - parameter parameters: The parameters. `nil` by default
          - parameter keyPath: The keyPath to use when deserializing the JSON. `nil` by default.
-         - parameter encoding: The parameter encoding. `URLEncoding.default` by default.
+         - parameter encoding: The parameter encoding. `JSONEncoding.default` by default.
          - parameter headers: The HTTP headers. `nil` by default.
          - parameter success: The block to execute if the request succeeds
          - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    public func mapObject<T: Mappable>(_ method: Alamofire.HTTPMethod,
-                         url: U,
-                         parameters: Parameters? = nil,
-                         keyPath: String? = nil,
-                         encoding: ParameterEncoding = URLEncoding.default,
-                         headers: HTTPHeaders? = nil,
-                         success: ((T) -> Void)?,
-                         failure: ((E) -> Void)?) -> DataRequest {
+    public func mapObject<C: Codable>(_ method: Alamofire.HTTPMethod,
+                                      url: Url,
+                                      parameters: Parameters? = nil,
+                                      keyPath: String? = nil,
+                                      encoding: ParameterEncoding = JSONEncoding.default,
+                                      headers: HTTPHeaders? = nil,
+                                      success: ((C) -> Void)?,
+                                      failure: ((ARError) -> Void)?) -> DataRequest {
         
         return makeRequest(method,
                            url: url,
                            parameters: parameters,
                            encoding: encoding,
                            headers: headers)
-            .responseObject(keyPath: keyPath, completionHandler: { (response: DataResponse<T>) in
-                            
+            .responseDecodable(decoder: AlamoRecordDecoder(keyPath: keyPath),
+                               completionHandler: { (response: DataResponse<C>) in
                 Logger.logFinishedResponse(response: response)
                 switch response.result {
-                    case .success:
-                    self.onSuccess(success: success, response: response)
+                case .success(let value):
+                    self.onSuccess(success: success, response: response, value: value)
                 case .failure(let error):
                     self.onFailure(error: error, response: response, failure: failure)
                 }
@@ -162,32 +160,32 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
          - parameter url: The URL that conforms to AlamoRecordURL
          - parameter parameters: The parameters. `nil` by default
          - parameter keyPath: The keyPath to use when deserializing the JSON. `nil` by default.
-         - parameter encoding: The parameter encoding. `URLEncoding.default` by default.
+         - parameter encoding: The parameter encoding. `JSONEncoding.default` by default.
          - parameter headers: The HTTP headers. `nil` by default.
          - parameter success: The block to execute if the request succeeds
          - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    public func mapObjects<T: Mappable>(_ method: Alamofire.HTTPMethod,
-                         url: U,
-                         parameters: Parameters? = nil,
-                         keyPath: String? = nil,
-                         encoding: ParameterEncoding = URLEncoding.default,
-                         headers: HTTPHeaders? = nil,
-                         success: (([T]) -> Void)?,
-                         failure: ((E) -> Void)?) -> DataRequest {
+    public func mapObjects<C: Codable>(_ method: Alamofire.HTTPMethod,
+                                       url: Url,
+                                       parameters: Parameters? = nil,
+                                       keyPath: String? = nil,
+                                       encoding: ParameterEncoding = JSONEncoding.default,
+                                       headers: HTTPHeaders? = nil,
+                                       success: (([C]) -> Void)?,
+                                       failure: ((ARError) -> Void)?) -> DataRequest {
         
         return makeRequest(method,
                            url: url,
                            parameters: parameters,
                            encoding: encoding,
                            headers: headers)
-            .responseArray(keyPath: keyPath, completionHandler: { (response: DataResponse<[T]>) in
-            
+            .responseDecodable(decoder: AlamoRecordDecoder(keyPath: keyPath),
+                               completionHandler: { (response: DataResponse<[C]>) in
                 Logger.logFinishedResponse(response: response)
                 switch response.result {
-                case .success:
-                    self.onSuccess(success: success, response: response)
+                case .success(let value):
+                    self.onSuccess(success: success, response: response, value: value)
                 case .failure(let error):
                     self.onFailure(error: error, response: response, failure: failure)
                 }
@@ -199,21 +197,21 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
          - parameter id: The id of the object to find
          - parameter parameters: The parameters. `nil` by default
          - parameter keyPath: The keyPath to use when deserializing the JSON. `nil` by default.
-         - parameter encoding: The parameter encoding. `URLEncoding.default` by default.
+         - parameter encoding: The parameter encoding. `JSONEncoding.default` by default.
          - parameter headers: The HTTP headers. `nil` by default.
          - parameter success: The block to execute if the request succeeds
          - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    public func findObject<T: AlamoRecordObject<U, E, IDType>>(id: IDType,
-                          parameters: Parameters? = nil,
-                          keyPath: String? = nil,
-                          encoding: ParameterEncoding = URLEncoding.default,
-                          headers: HTTPHeaders? = nil,
-                          success:((T) -> Void)?,
-                          failure:((E) -> Void)?) -> DataRequest {
+    public func findObject<O: ARObject>(id: IDType,
+                                      parameters: Parameters? = nil,
+                                      keyPath: String? = nil,
+                                      encoding: ParameterEncoding = JSONEncoding.default,
+                                      headers: HTTPHeaders? = nil,
+                                      success:((O) -> Void)?,
+                                      failure:((ARError) -> Void)?) -> DataRequest {
         
-        return findObject(url: T.urlForFind(id),
+        return findObject(url: O.urlForFind(id),
                           parameters: parameters,
                           keyPath: keyPath,
                           encoding: encoding,
@@ -227,19 +225,19 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
          - parameter url: The URL that conforms to AlamoRecordURL
          - parameter parameters: The parameters. `nil` by default
          - parameter keyPath: The keyPath to use when deserializing the JSON. `nil` by default.
-         - parameter encoding: The parameter encoding. `URLEncoding.default` by default.
+         - parameter encoding: The parameter encoding. `JSONEncoding.default` by default.
          - parameter headers: The HTTP headers. `nil` by default.
          - parameter success: The block to execute if the request succeeds
          - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    public func findObject<T: AlamoRecordObject<U, E, IDType>>(url: U,
+    public func findObject<O: ARObject>(url: Url,
                                  parameters: Parameters? = nil,
                                  keyPath: String? = nil,
-                                 encoding: ParameterEncoding = URLEncoding.default,
+                                 encoding: ParameterEncoding = JSONEncoding.default,
                                  headers: HTTPHeaders? = nil,
-                                 success:((T) -> Void)?,
-                                 failure:((E) -> Void)?) -> DataRequest {
+                                 success:((O) -> Void)?,
+                                 failure:((ARError) -> Void)?) -> DataRequest {
         
         return mapObject(.get,
                          url: url,
@@ -256,19 +254,19 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
          - parameter url: The URL that conforms to AlamoRecordURL
          - parameter parameters: The parameters. `nil` by default
          - parameter keyPath: The keyPath to use when deserializing the JSON. `nil` by default.
-         - parameter encoding: The parameter encoding. `URLEncoding.default` by default.
+         - parameter encoding: The parameter encoding. `JSONEncoding.default` by default.
          - parameter headers: The HTTP headers. `nil` by default.
          - parameter success: The block to execute if the request succeeds
          - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    public func findArray<T: Mappable>(_ url: U,
-                         parameters: Parameters? = nil,
-                         keyPath: String? = nil,
-                         encoding: ParameterEncoding = URLEncoding.default,
-                         headers: HTTPHeaders? = nil,
-                         success:(([T]) -> Void)?,
-                         failure:((E) -> Void)?) -> DataRequest {
+    public func findArray<C: Codable>(_ url: Url,
+                                      parameters: Parameters? = nil,
+                                      keyPath: String? = nil,
+                                      encoding: ParameterEncoding = JSONEncoding.default,
+                                      headers: HTTPHeaders? = nil,
+                                      success:(([C]) -> Void)?,
+                                      failure:((ARError) -> Void)?) -> DataRequest {
         
         return mapObjects(.get,
                           url: url,
@@ -284,26 +282,26 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
          Makes a request and creates an AlamoRecordObjects
          - parameter parameters: The parameters. `nil` by default
          - parameter keyPath: The keyPath to use when deserializing the JSON. `nil` by default.
-         - parameter encoding: The parameter encoding. `URLEncoding.default` by default.
+         - parameter encoding: The parameter encoding. `JSONEncoding.default` by default.
          - parameter headers: The HTTP headers. `nil` by default.
          - parameter success: The block to execute if the request succeeds
          - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    public func createObject<T: AlamoRecordObject<U, E, IDType>>(parameters: Parameters? = nil,
-                            keyPath: String? = nil,
-                            encoding: ParameterEncoding = URLEncoding.default,
-                            headers: HTTPHeaders? = nil,
-                            success:((T) -> Void)?,
-                            failure:((E) -> Void)?) -> DataRequest {
+    public func createObject<O: ARObject>(parameters: Parameters? = nil,
+                                                                 keyPath: String? = nil,
+                                                                 encoding: ParameterEncoding = JSONEncoding.default,
+                                                                 headers: HTTPHeaders? = nil,
+                                                                 success:((O) -> Void)?,
+                                                                 failure:((ARError) -> Void)?) -> DataRequest {
         
-        return createObject(url: T.urlForCreate(),
-                         parameters: parameters,
-                         keyPath: keyPath,
-                         encoding: encoding,
-                         headers: headers,
-                         success: success,
-                         failure: failure)
+        return createObject(url: O.urlForCreate(),
+                            parameters: parameters,
+                            keyPath: keyPath,
+                            encoding: encoding,
+                            headers: headers,
+                            success: success,
+                            failure: failure)
     }
 
     /**
@@ -311,19 +309,19 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
          - paramter url: The URL that conforms to AlamoRecordURL
          - parameter parameters: The parameters. `nil` by default
          - parameter keyPath: The keyPath to use when deserializing the JSON. `nil` by default.
-         - parameter encoding: The parameter encoding. `URLEncoding.default` by default.
+         - parameter encoding: The parameter encoding. `JSONEncoding.default` by default.
          - parameter headers: The HTTP headers. `nil` by default.
          - parameter success: The block to execute if the request succeeds
          - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    public func createObject<T: AlamoRecordObject<U, E, IDType>>(url: U,
-                                   parameters: Parameters? = nil,
-                                   keyPath: String? = nil,
-                                   encoding: ParameterEncoding = URLEncoding.default,
-                                   headers: HTTPHeaders? = nil,
-                                   success:((T) -> Void)?,
-                                   failure:((E) -> Void)?) -> DataRequest {
+    public func createObject<O: ARObject>(url: Url,
+                                                                 parameters: Parameters? = nil,
+                                                                 keyPath: String? = nil,
+                                                                 encoding: ParameterEncoding = JSONEncoding.default,
+                                                                 headers: HTTPHeaders? = nil,
+                                                                 success:((O) -> Void)?,
+                                                                 failure:((ARError) -> Void)?) -> DataRequest {
         
         return mapObject(.post,
                          url: url,
@@ -338,18 +336,18 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
     /**
          Makes a request and creates the object
          - parameter parameters: The parameters. `nil` by default
-         - parameter encoding: The parameter encoding. `URLEncoding.default` by default.
+         - parameter encoding: The parameter encoding. `JSONEncoding.default` by default.
          - parameter headers: The HTTP headers. `nil` by default.
          - parameter success: The block to execute if the request succeeds
          - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    public func createObject(url: U,
+    public func createObject(url: Url,
                              parameters: Parameters? = nil,
-                             encoding: ParameterEncoding = URLEncoding.default,
+                             encoding: ParameterEncoding = JSONEncoding.default,
                              headers: HTTPHeaders? = nil,
                              success:(() -> Void)?,
-                             failure:((E) -> Void)?) -> DataRequest {
+                             failure:((ARError) -> Void)?) -> DataRequest {
         
         return makeRequest(.post,
                            url: url,
@@ -365,21 +363,21 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
          - parameter id: The id of the object to update
          - parameter parameters: The parameters. `nil` by default
          - parameter keyPath: The keyPath to use when deserializing the JSON. `nil` by default.
-         - parameter encoding: The parameter encoding. `URLEncoding.default` by default.
+         - parameter encoding: The parameter encoding. `JSONEncoding.default` by default.
          - parameter headers: The HTTP headers. `nil` by default.
          - parameter success: The block to execute if the request succeeds
          - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    public func updateObject<T: AlamoRecordObject<U, E, IDType>>(id: IDType,
-                                 parameters: Parameters? = nil,
-                                 keyPath: String? = nil,
-                                 encoding: ParameterEncoding = URLEncoding.default,
-                                 headers: HTTPHeaders? = nil,
-                                 success:((T) -> Void)?,
-                                 failure:((E) -> Void)?) -> DataRequest {
+    public func updateObject<O: ARObject>(id: IDType,
+                                                                       parameters: Parameters? = nil,
+                                                                       keyPath: String? = nil,
+                                                                       encoding: ParameterEncoding = JSONEncoding.default,
+                                                                       headers: HTTPHeaders? = nil,
+                                                                       success:((O) -> Void)?,
+                                                                       failure:((ARError) -> Void)?) -> DataRequest {
         
-        return updateObject(url: T.urlForUpdate(id),
+        return updateObject(url: O.urlForUpdate(id),
                          parameters: parameters,
                          keyPath: keyPath,
                          encoding: encoding,
@@ -393,19 +391,19 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
          - parameter url: The URL that conforms to AlamoRecordURL
          - parameter parameters: The parameters. `nil` by default
          - parameter keyPath: The keyPath to use when deserializing the JSON. `nil` by default.
-         - parameter encoding: The parameter encoding. `URLEncoding.default` by default.
+         - parameter encoding: The parameter encoding. `JSONEncoding.default` by default.
          - parameter headers: The HTTP headers. `nil` by default.
          - parameter success: The block to execute if the request succeeds
          - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    public func updateObject<T: AlamoRecordObject<U, E, IDType>>(url: U,
-                                 parameters: Parameters? = nil,
-                                 keyPath: String? = nil,
-                                 encoding: ParameterEncoding = URLEncoding.default,
-                                 headers: HTTPHeaders? = nil,
-                                 success:((T) -> Void)?,
-                                 failure:((E) -> Void)?) -> DataRequest {
+    public func updateObject<O: ARObject>(url: Url,
+                                                                       parameters: Parameters? = nil,
+                                                                       keyPath: String? = nil,
+                                                                       encoding: ParameterEncoding = JSONEncoding.default,
+                                                                       headers: HTTPHeaders? = nil,
+                                                                       success:((O) -> Void)?,
+                                                                       failure:((ARError) -> Void)?) -> DataRequest {
         
         return mapObject(.put,
                          url: url,
@@ -422,18 +420,18 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
      - parameter url: The URL that conforms to AlamoRecordURL
      - parameter parameters: The parameters. `nil` by default
      - parameter keyPath: The keyPath to use when deserializing the JSON. `nil` by default.
-     - parameter encoding: The parameter encoding. `URLEncoding.default` by default.
+     - parameter encoding: The parameter encoding. `JSONEncoding.default` by default.
      - parameter headers: The HTTP headers. `nil` by default.
      - parameter success: The block to execute if the request succeeds
      - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    public func updateObject(url: U,
+    public func updateObject(url: Url,
                              parameters: Parameters? = nil,
-                             encoding: ParameterEncoding = URLEncoding.default,
+                             encoding: ParameterEncoding = JSONEncoding.default,
                              headers: HTTPHeaders? = nil,
                              success:(() -> Void)?,
-                             failure:((E) -> Void)?) -> DataRequest {
+                             failure:((ARError) -> Void)?) -> DataRequest {
         
         return makeRequest(.put,
                            url: url,
@@ -448,18 +446,18 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
          Makes a request and destroys an AlamoRecordObject
          - parameter url: The URL that conforms to AlamoRecordURL
          - parameter parameters: The parameters. `nil` by default
-         - parameter encoding: The parameter encoding. `URLEncoding.default` by default.
+         - parameter encoding: The parameter encoding. `JSONEncoding.default` by default.
          - parameter headers: The HTTP headers. `nil` by default.
          - parameter success: The block to execute if the request succeeds
          - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    public func destroyObject(url: U,
+    public func destroyObject(url: Url,
                               parameters: Parameters? = nil,
-                              encoding: ParameterEncoding = URLEncoding.default,
+                              encoding: ParameterEncoding = JSONEncoding.default,
                               headers: HTTPHeaders? = nil,
                               success:(() -> Void)?,
-                              failure:((E) -> Void)?) -> DataRequest {
+                              failure:((ARError) -> Void)?) -> DataRequest {
         
         return makeRequest(.delete,
                            url: url,
@@ -481,32 +479,27 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
      - parameter success: The block to execute if the request succeeds
      - parameter failure: The block to execute if the request fails
      */
-    public func upload<T: Mappable>(url: U,
-                       keyPath: String? = nil,
-                       headers: HTTPHeaders? = nil,
-                       multipartFormData: @escaping ((MultipartFormData) -> Void),
-                       progressHandler: Request.ProgressHandler? = nil,
-                       success: ((T) -> Void)?,
-                       failure: ((E) -> Void)?) {
-        
-        sessionManager.upload(multipartFormData: multipartFormData, to: url.absolute, headers: headers) { (result) in
-            switch result {
-            case .success(let request, _, _):
-                if let progressHandler = progressHandler {
-                    request.uploadProgress(closure: progressHandler)
-                }
-                request.responseObject(keyPath: keyPath, completionHandler: { (response: DataResponse<T>) in
-                    switch response.result {
-                    case .success:
-                        success?(response.result.value!)
-                    case .failure(let error):
-                        self.onFailure(error: error, response: response, failure: failure)
-                    }
-                })
-            case .failure(let error):
-                failure?(E(nsError: error as NSError))
+    public func upload<C: Codable>(url: Url,
+                                   keyPath: String? = nil,
+                                   headers: HTTPHeaders? = nil,
+                                   multipartFormData: @escaping ((MultipartFormData) -> Void),
+                                   progressHandler: Request.ProgressHandler? = nil,
+                                   success: ((C) -> Void)?,
+                                   failure: ((ARError) -> Void)?) {
+    
+        session.upload(multipartFormData: multipartFormData, to: url.absolute, headers: headers)
+            .uploadProgress { progress in
+                progressHandler?(progress)
             }
-        }
+            .responseDecodable(decoder: AlamoRecordDecoder(keyPath: keyPath),
+                               completionHandler: { (response: DataResponse<C>) in
+                switch response.result {
+                case .success(let value):
+                    success?(value)
+                case .failure(let error):
+                    failure?(ARError(error: error))
+                }
+            })
     }
     
     /**
@@ -517,13 +510,14 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
          - parameter success: The block to execute if the request succeeds
          - parameter failure: The block to execute if the request fails
      */
-    public func download(url: U,
-                         destination: DownloadRequest.DownloadFileDestination? = nil,
+    public func download(url: Url,
+                         destination: DownloadRequest.Destination? = nil,
                          progress: Request.ProgressHandler? = nil,
                          success: @escaping ((URL?) -> Void),
-                         failure: @escaping ((E) -> Void)) {
+                         failure: @escaping ((ARError) -> Void)) {
         
-        var finalDestination: DownloadRequest.DownloadFileDestination!
+        let finalDestination: DownloadRequest.Destination
+        
         if let destination = destination {
             finalDestination = destination
         } else {
@@ -534,9 +528,9 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
             }
         }
     
-        sessionManager.download(url.absolute, to: finalDestination).downloadProgress(closure: { (prog) in
+        session.download(url.absolute, to: finalDestination).downloadProgress(closure: { (prog) in
             progress?(prog)
-        }).response { (response) in
+        }).response { response in
             if let error = response.error {
                 self.onFailure(error: error, response: response, failure: failure)
             } else {
@@ -556,23 +550,23 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
     }
     
     /**
-         Performs any logic associated with a successful DataResponse<T>
+         Performs any logic associated with a successful DataResponse<C>
          - parameter success: The block to execute if the request succeeds
          - parameter response: The response of the request
      */
-    private func onSuccess<T: Mappable>(success: ((T) -> Void)?, response: DataResponse<T>) {
+    private func onSuccess<C: Codable>(success: ((C) -> Void)?, response: DataResponse<C>, value: C) {
         sendEventsToObservers(response: response.response)
-        success?(response.result.value!)
+        success?(value)
     }
     
     /**
-         Performs any logic associated with a successful DataResponse<[T]>
+         Performs any logic associated with a successful DataResponse<[C]>
          - parameter success: The block to execute if the request succeeds
          - parameter response: The response of the request
      */
-    private func onSuccess<T: Mappable>(success: (([T]) -> Void)?, response: DataResponse<[T]>) {
+    private func onSuccess<C: Codable>(success: (([C]) -> Void)?, response: DataResponse<[C]>, value: [C]) {
         sendEventsToObservers(response: response.response)
-        success?(response.result.value!)
+        success?(value)
     }
     
     /**
@@ -581,9 +575,9 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
          - parameter response: The response of the request
      */
     private func onSuccess(success: ((URL?) -> Void)?,
-                           response: DefaultDownloadResponse) {
+                           response: DownloadResponse<URL?>) {
         sendEventsToObservers(response: response.response)
-        success?(response.destinationURL)
+        success?(response.fileURL)
     }
     
     /**
@@ -610,7 +604,7 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
      */
     private func onFailure(error: Error,
                            response: DataResponse<Any>,
-                           failure:((E) -> Void)?) {
+                           failure:((ARError) -> Void)?) {
         onFailure(error: error,
                   responseData: response.data,
                   statusCode: response.response?.statusCode,
@@ -618,14 +612,14 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
     }
 
     /**
-         Performs any logic associated with a failed DataResponse<T>
+         Performs any logic associated with a failed DataResponse<C>
          - parameter error: The error the request returned
          - parameter response: The response of the request
          - parameter failure: The block to execute if the request fails
      */
-    private func onFailure<T: Mappable>(error: Error,
-                                 response: DataResponse<T>,
-                                 failure:((E) -> Void)?) {
+    private func onFailure<C: Codable>(error: Error,
+                                       response: DataResponse<C>,
+                                       failure:((ARError) -> Void)?) {
         onFailure(error: error,
                   responseData: response.data,
                   statusCode: response.response?.statusCode,
@@ -633,14 +627,14 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
     }
     
     /**
-         Performs any logic associated with a failed DataResponse<[T]>
+         Performs any logic associated with a failed DataResponse<[C]>
          - parameter error: The error the request returned
          - parameter response: The response of the request
          - parameter failure: The block to execute if the request fails
      */
-    private func onFailure<T: Mappable>(error: Error,
-                                 response: DataResponse<[T]>,
-                                 failure:((E) -> Void)?) {
+    private func onFailure<C: Codable>(error: Error,
+                                       response: DataResponse<[C]>,
+                                       failure:((ARError) -> Void)?) {
         onFailure(error: error,
                   responseData: response.data,
                   statusCode: response.response?.statusCode,
@@ -654,8 +648,8 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
          - parameter failure: The block to execute if the request fails
      */
     private func onFailure(error: Error,
-                           response: DefaultDownloadResponse,
-                           failure:((E) -> Void)?) {
+                           response: DownloadResponse<URL?>,
+                           failure:((ARError) -> Void)?) {
         onFailure(error: error,
                   responseData: nil,
                   statusCode: response.response?.statusCode,
@@ -672,19 +666,19 @@ open class RequestManager<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObj
     private func onFailure(error: Error,
                            responseData: Data?,
                            statusCode: Int?,
-                           failure: ((E) -> Void)?) {
+                           failure: ((ARError) -> Void)?) {
         
         let nsError = error as NSError
         if configuration.ignoredErrorCodes.contains(nsError.code) {
             return
         }
         
-        let error: E = ErrorParser.parse(responseData, error: nsError)
+        let error: ARError = ErrorParser.parse(responseData, error: nsError, statusCode: statusCode)
         
         if let statusCode = statusCode {
             configuration.statusCodeObserver?.onStatusCode(statusCode: statusCode, error: error)
         }
-        
+
         failure?(error)
     }
 

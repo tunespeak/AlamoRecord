@@ -21,14 +21,11 @@ import Alamofire
 open class Configuration: NSObject {
     
     /// See URLSessionConfiguration Documentation
-    public var urlSessionConfiguration: URLSessionConfiguration!
+    public let urlSessionConfiguration: URLSessionConfiguration
     
-    /// See Alamofire.RequestRetrier Documentation
-    public var requestRetrier: RequestRetrier?
-    
-    /// See Alamofire.RequestAdapter Documentation
-    public var requestAdapter: RequestAdapter?
-    
+    /// See Alamofire.RequestInterceptor Documentation
+    public var requestInterceptor: RequestInterceptor?
+
     /// The status codes this configuration should ignore for failed requests
     public var ignoredErrorCodes: [Int] = []
     
@@ -39,13 +36,13 @@ open class Configuration: NSObject {
     public var requestObserver: RequestObserver?
     
     public override init() {
-        super.init()
         
         let bundleIdentifier = Bundle.main.bundleIdentifier ?? "AlamoRecord"
         let randomId = UUID.init().uuidString // Need a random id in case multiple request manager instances are created
         urlSessionConfiguration = URLSessionConfiguration.background(withIdentifier: "\(bundleIdentifier)-\(randomId).background")
         urlSessionConfiguration.timeoutIntervalForRequest = 30.0
         urlSessionConfiguration.timeoutIntervalForResource = 30.0
+        super.init()
     }
     
     public convenience init(builder: (Configuration) -> ()) {

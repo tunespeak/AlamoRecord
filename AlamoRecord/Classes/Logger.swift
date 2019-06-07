@@ -30,14 +30,9 @@ class Logger: NSObject {
         Logs a request that just started to the console
         - parameter request: The request to log to the console
     */
-    class func logRequest(request: DataRequest) {
-        guard let httpMethod = request.request?.httpMethod, let url = request.request?.url else {
-            print("[AlamoRecordLogger] The request appears to invalid. Please check your URL and try again.")
-            return
-        }
-        if loggingEnabled {
-            print("🔵 \(loggerPrefix) \(httpMethod) \(url.absoluteString)")
-        }
+    class func logRequest(_ method: HTTPMethod, url: String) {
+        guard loggingEnabled else { return }
+        print("🔵 \(loggerPrefix) \(method.rawValue.uppercased()) \(url)")
     }
     
     /*
@@ -45,19 +40,19 @@ class Logger: NSObject {
         - parameter response: The response to log to the console
      */
     class func logFinishedResponse<AnyObject>(response: DataResponse<AnyObject>) {
-        guard let responseObject = response.response else {
-            return
-        }
         
-        if loggingEnabled {
-            let method = response.request!.httpMethod!
-            let urlString = response.request!.url!.absoluteString
-            let statusCode = responseObject.statusCode
-            let statusCodeString = statusCodeStrings[statusCode]
-            let duration = String(response.timeline.totalDuration)
-            let trimmedDuration = String(duration[duration.startIndex..<duration.index(duration.startIndex, offsetBy: 4)])
-            print("\(emoji(for: statusCode)) \(loggerPrefix) \(method) \(urlString) (\(statusCode) \(statusCodeString!)) \(trimmedDuration) seconds")            
-        }
+        guard loggingEnabled,
+            let method = response.request?.httpMethod,
+            let urlString = response.request?.url?.absoluteString,
+            let statusCode = response.response?.statusCode,
+            let statusCodeString = statusCodeStrings[statusCode],
+            let duration = response.metrics?.taskInterval.duration else { return }
+        
+        let durationString = String(duration)
+        let index = durationString.startIndex..<durationString.index(durationString.startIndex, offsetBy: 4)
+        let trimmedDuration = String(durationString[index])
+        
+        print("\(emoji(for: statusCode)) \(loggerPrefix) \(method) \(urlString) (\(statusCode) \(statusCodeString)) \(trimmedDuration) seconds")
     }
     
     /*

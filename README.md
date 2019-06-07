@@ -7,7 +7,7 @@
 
 ## Written in Swift 5
 
-AlamoRecord is a powerful yet simple framework that eliminates the often complex networking layer that exists between your networking framework and your application. AlamoRecord uses the power of [AlamoFire](https://github.com/Alamofire/Alamofire), [AlamofireObjectMapper](https://github.com/tristanhimmelman/AlamofireObjectMapper) and the concepts behind the [ActiveRecord](http://guides.rubyonrails.org/active_record_basics.html) pattern to create a networking layer that makes interacting with your API easier than ever.
+AlamoRecord is a powerful yet simple framework that eliminates the often complex networking layer that exists between your networking framework and your application. AlamoRecord uses the power of [Alamofire](https://github.com/Alamofire/Alamofire) and the concepts behind the [ActiveRecord](http://guides.rubyonrails.org/active_record_basics.html) pattern to create a networking layer that makes interacting with your API easier than ever.
 
 ## Requirements
 
@@ -87,22 +87,14 @@ Our class structure would then look very similar to this:
 ```swift
 class ApplicationError: AlamoRecordError {
 
-    private(set) var statusCode: Int?
-    private(set) var message: String?
-
-    required init(nsError: NSError) {
-        super.init(nsError: nsError)
+    let statusCode: Int?
+    let message: String?
+    
+    private enum CodingKeys: String, CodingKey {
+        case statusCode = "status_code"
+        case message
     }
     
-    required public init?(map: Map) {
-        super.init(map: map)
-    }
-    
-    override func mapping(map: Map) {
-        super.mapping(map: map)
-        statusCode <- map["status_code"]
-        message <- map["message"]
-    }
 }
 ```
 
@@ -134,32 +126,30 @@ The final step is to create data objects inheriting from `AlamoRecordObject` tha
 ```swift
 // IDType should be of type String or Int
 class Post: AlamoRecordObject<ApplicationURL, ApplicationError, IDType> {
+
+    let userId: Int
+    let title: String
+    let body: String
     
-    override class var requestManager: RequestManager<ApplicationURL, ApplicationError, IDType> {
-        return ApplicationRequestManager
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        title = try container.decode(String.self, forKey: .title)
+        body = try container.decode(String.self, forKey: .body)
+        try super.init(from: decoder)
     }
     
     override class var root: String {
         return "post"
     }
-
-    private(set) var userId: Int!
-    private(set) var title: String!
-    private(set) var body: String!
     
-    required init?(map: Map) {
-        super.init(map: map)
+    override class var requestManager: RequestManager<ApplicationURL, ApplicationError, IDType> {
+        return ApplicationRequestManager
     }
     
-    required public init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
-    override func mapping(map: Map) {
-        super.mapping(map: map)
-        userId <- map["userId"]
-        title <- map["title"]
-        body <- map["body"]
+    private enum CodingKeys: String, CodingKey {
+        case userId
+        case title
+        case body
     }
 
 }
@@ -192,7 +182,7 @@ If our `Post` object was encapsulated in an object like this:
 we would only simply need to override the `keyPath` in the class declaration:
 
 ```swift
-open override class var keyPath: String? {
+override class var keyPath: String? {
      return "post"
 }
 ```

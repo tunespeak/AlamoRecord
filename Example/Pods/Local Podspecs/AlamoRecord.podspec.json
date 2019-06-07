@@ -1,6 +1,6 @@
 {
   "name": "AlamoRecord",
-  "version": "1.4.0",
+  "version": "2.0.0",
   "summary": "An elegant Alamofire wrapper inspired by ActiveRecord.",
   "description": "AlamoRecord is a powerful yet simple framework that eliminates the often complex networking layer that exists between your networking framework and your application. AlamoRecord uses the power of AlamoFire, AlamofireObjectMapper and the concepts behind the ActiveRecord pattern to create a networking layer that makes interacting with your API easier than ever.",
   "homepage": "https://github.com/tunespeak/AlamoRecord",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/tunespeak/AlamoRecord.git",
-    "tag": "1.4.0"
+    "tag": "2.0.0"
   },
   "swift_version": "5.0",
   "platforms": {
@@ -24,8 +24,8 @@
   },
   "source_files": "AlamoRecord/Classes/**/*",
   "dependencies": {
-    "AlamofireObjectMapper": [
-      "5.1.0"
+    "Alamofire": [
+      "5.0.0-beta.6"
     ]
   }
 }

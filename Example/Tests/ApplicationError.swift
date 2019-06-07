@@ -7,27 +7,10 @@
 //
 
 import AlamoRecord
-import ObjectMapper
 
 class ApplicationError: AlamoRecordError {
-
-    required init(nsError: NSError) {
-        super.init(nsError: nsError)
-    }
     
-    required public init?(map: Map) {
-        super.init(map: map)
-    }
-    
-    required public init?(coder aDecoder: NSCoder) {
-       super.init(coder: aDecoder)
-    }
-    
-    public required init() {
-        fatalError("init() has not been implemented")
-    }
-    
-    override func mapping(map: Map) {
-        super.mapping(map: map)
+    required init(from decoder: Decoder) throws {
+        <#code#>
     }
 }

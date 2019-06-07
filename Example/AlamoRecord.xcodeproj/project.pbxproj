@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5C25BD0822A9F08E0074320C /* AlamoRecordDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C25BD0722A9F08E0074320C /* AlamoRecordDecoder.swift */; };
+		5C25BD0922A9F6820074320C /* AlamoRecordDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C25BD0722A9F08E0074320C /* AlamoRecordDecoder.swift */; };
 		5C4141901F1181C200A18674 /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C41418F1F1181C200A18674 /* CommentCell.swift */; };
 		5C4141941F12CE6B00A18674 /* CreatePostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4141931F12CE6B00A18674 /* CreatePostModel.swift */; };
 		5C4141961F12CE7800A18674 /* CreatePostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4141951F12CE7800A18674 /* CreatePostView.swift */; };
@@ -71,6 +73,7 @@
 		34615B12F449D260169502E2 /* Pods-AlamoRecord_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AlamoRecord_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AlamoRecord_Example/Pods-AlamoRecord_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		35147C54E24FC9C20F682301 /* Pods_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B7C3F03A1046596BEE7867D /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		5C25BD0722A9F08E0074320C /* AlamoRecordDecoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AlamoRecordDecoder.swift; path = ../../AlamoRecord/Classes/AlamoRecordDecoder.swift; sourceTree = "<group>"; };
 		5C41418F1F1181C200A18674 /* CommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentCell.swift; sourceTree = "<group>"; };
 		5C4141931F12CE6B00A18674 /* CreatePostModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePostModel.swift; sourceTree = "<group>"; };
 		5C4141951F12CE7800A18674 /* CreatePostView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePostView.swift; sourceTree = "<group>"; };
@@ -205,6 +208,7 @@
 		5C94C2F21F08706400762CFC /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				5C25BD0722A9F08E0074320C /* AlamoRecordDecoder.swift */,
 				5C86407E1F09D5E6001E8320 /* AlamoRecordError.swift */,
 				5C94C2F31F08707F00762CFC /* AlamoRecordObject.swift */,
 				5CA0A94E21825DA3002BA69A /* AlamoRecordURL.swift */,
@@ -398,22 +402,18 @@
 				"${PODS_ROOT}/Target Support Files/Pods-AlamoRecord_Example/Pods-AlamoRecord_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AlamoRecord/AlamoRecord.framework",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/AlamofireObjectMapper/AlamofireObjectMapper.framework",
 				"${BUILT_PRODUCTS_DIR}/KeyboardSpy/KeyboardSpy.framework",
 				"${BUILT_PRODUCTS_DIR}/MarqueeLabel/MarqueeLabel.framework",
 				"${BUILT_PRODUCTS_DIR}/NotificationBannerSwift/NotificationBannerSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/ObjectMapper/ObjectMapper.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamoRecord.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireObjectMapper.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeyboardSpy.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MarqueeLabel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NotificationBannerSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjectMapper.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -466,15 +466,11 @@
 				"${PODS_ROOT}/Target Support Files/Pods-Tests/Pods-Tests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AlamoRecord/AlamoRecord.framework",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/AlamofireObjectMapper/AlamofireObjectMapper.framework",
-				"${BUILT_PRODUCTS_DIR}/ObjectMapper/ObjectMapper.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamoRecord.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireObjectMapper.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjectMapper.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -490,6 +486,7 @@
 			files = (
 				5C63470B1F0B088200158A80 /* ApplicationError.swift in Sources */,
 				5CCB209A1F1706880027BA56 /* Logger.swift in Sources */,
+				5C25BD0922A9F6820074320C /* AlamoRecordDecoder.swift in Sources */,
 				5CCB20951F17064E0027BA56 /* Comment.swift in Sources */,
 				5CCB209C1F1706880027BA56 /* RequestObserver.swift in Sources */,
 				5CCB209B1F1706880027BA56 /* RequestManager.swift in Sources */,
@@ -530,6 +527,7 @@
 				5C94C3001F08707F00762CFC /* ErrorParser.swift in Sources */,
 				5C96D9911F0ECC4E005FF25E /* PostsViewController.swift in Sources */,
 				5C96D9971F0EDB71005FF25E /* ColorsExtension.swift in Sources */,
+				5C25BD0822A9F08E0074320C /* AlamoRecordDecoder.swift in Sources */,
 				5C94C3081F08707F00762CFC /* RequestObserver.swift in Sources */,
 				5CE6C8161F102C5200965235 /* Comment.swift in Sources */,
 				5C4141981F12CE8300A18674 /* CreatePostViewController.swift in Sources */,

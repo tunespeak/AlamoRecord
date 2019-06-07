@@ -17,13 +17,11 @@
  */
 
 import Alamofire
-import AlamofireObjectMapper
-import ObjectMapper
 
-open class AlamoRecordObject<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NSObject, Mappable {
+open class AlamoRecordObject<U: AlamoRecordURL, E: AlamoRecordError, IDType: Codable>: Codable {
     
-    /// Key to encode/decode the id variable
-    private let idKey: String = "id"
+    /// The id of this instance. This should be a String or an Int.
+    public let id: IDType
     
     /// The RequestManager that is tied to all instances of this class
     open class var requestManager: RequestManager<U, E, IDType> {
@@ -34,9 +32,6 @@ open class AlamoRecordObject<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NS
     open var requestManager: RequestManager<U, E, IDType> {
         return type(of: self).requestManager
     }
-    
-    /// The id of this instance. This should be a String or an Int.
-    open var id: IDType!
     
     /// The root of all instances of this class. This is used when making URL's that relate to a component of this class.
     // Example: '/comment/id' --> '/\(Comment.root)/id'
@@ -95,37 +90,24 @@ open class AlamoRecordObject<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NS
     open var pluralKeyPath: String? {
         return type(of: self).pluralKeyPath
     }
-    
-    public override init() {
-        super.init()
-    }
-    
-    public required init?(map: Map) {
-        super.init()
-        mapping(map: map)
-    }
-    
-    open func mapping(map: Map) {
-        id <- map["id"]
-    }
 
     /**
         Returns an array of all objects of this instance if the server supports it
         - parameter parameters: The parameters. `nil` by default
-        - parameter encoding: The parameter encoding. `URLEncoding.default` by default
+        - parameter encoding: The parameter encoding. `JSONEncoding.default` by default
         - parameter headers: The HTTP headers. `nil` by default
         - parameter success: The block to execute if the request succeeds
         - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    open class func all<T: AlamoRecordObject>(parameters: Parameters? = nil,
-                        encoding: ParameterEncoding = URLEncoding.default,
-                        headers: HTTPHeaders? = nil,
-                        success: (([T]) -> Void)?,
-                        failure: ((E) -> Void)?) -> DataRequest {
-        return requestManager.findArray(T.urlForAll(),
+    open class func all<O: AlamoRecordObject>(parameters: Parameters? = nil,
+                                              encoding: ParameterEncoding = JSONEncoding.default,
+                                              headers: HTTPHeaders? = nil,
+                                              success: (([O]) -> Void)?,
+                                              failure: ((E) -> Void)?) -> DataRequest {
+        return requestManager.findArray(O.urlForAll(),
                                         parameters: parameters,
-                                        keyPath: T.pluralKeyPath,
+                                        keyPath: O.pluralKeyPath,
                                         encoding: encoding,
                                         headers: headers,
                                         success: success,
@@ -135,17 +117,17 @@ open class AlamoRecordObject<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NS
     /**
         Creates an object of this instance
         - parameter parameters: The parameters. `nil` by default
-        - parameter encoding: The parameter encoding. `URLEncoding.default` by default
+        - parameter encoding: The parameter encoding. `JSONEncoding.default` by default
         - parameter headers: The HTTP headers. `nil` by default
         - parameter success: The block to execute if the request succeeds
         - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    open class func create<T: AlamoRecordObject>(parameters: Parameters? = nil,
-                    encoding: ParameterEncoding = URLEncoding.default,
-                    headers: HTTPHeaders? = nil,
-                    success: ((T) -> Void)?,
-                    failure: ((E) -> Void)?) -> DataRequest {
+    open class func create<O: AlamoRecordObject>(parameters: Parameters? = nil,
+                                                 encoding: ParameterEncoding = JSONEncoding.default,
+                                                 headers: HTTPHeaders? = nil,
+                                                 success: ((O) -> Void)?,
+                                                 failure: ((E) -> Void)?) -> DataRequest {
         
         return requestManager.createObject(parameters: parameters,
                                            keyPath: keyPath,
@@ -158,14 +140,14 @@ open class AlamoRecordObject<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NS
     /**
      Creates an object of this instance
      - parameter parameters: The parameters. `nil` by default
-     - parameter encoding: The parameter encoding. `URLEncoding.default` by default
+     - parameter encoding: The parameter encoding. `JSONEncoding.default` by default
      - parameter headers: The HTTP headers. `nil` by default
      - parameter success: The block to execute if the request succeeds
      - parameter failure: The block to execute if the request fails
      */
     @discardableResult
     open class func create(parameters: Parameters? = nil,
-                           encoding: ParameterEncoding = URLEncoding.default,
+                           encoding: ParameterEncoding = JSONEncoding.default,
                            headers: HTTPHeaders? = nil,
                            success: (() -> Void)?,
                            failure: ((E) -> Void)?) -> DataRequest {
@@ -182,18 +164,18 @@ open class AlamoRecordObject<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NS
      Finds an object of this instance based on the given id
      - parameter id: The id of the object to find
      - parameter parameters: The parameters. `nil` by default
-     - parameter encoding: The parameter encoding. `URLEncoding.default` by default
+     - parameter encoding: The parameter encoding. `JSONEncoding.default` by default
      - parameter headers: The HTTP headers. `nil` by default
      - parameter success: The block to execute if the request succeeds
      - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    open class func find<T: AlamoRecordObject>(id: IDType,
-                         parameters: Parameters? = nil,
-                         encoding: ParameterEncoding = URLEncoding.default,
-                         headers: HTTPHeaders? = nil,
-                         success: ((T) -> Void)?,
-                         failure: ((E) -> Void)?) -> DataRequest {
+    open class func find<O: AlamoRecordObject>(id: IDType,
+                                               parameters: Parameters? = nil,
+                                               encoding: ParameterEncoding = JSONEncoding.default,
+                                               headers: HTTPHeaders? = nil,
+                                               success: ((O) -> Void)?,
+                                               failure: ((E) -> Void)?) -> DataRequest {
         
         return requestManager.findObject(id: id,
                                          parameters: parameters,
@@ -207,19 +189,19 @@ open class AlamoRecordObject<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NS
     /**
      Updates the object
      - parameter parameters: The parameters. `nil` by default
-     - parameter encoding: The parameter encoding. `URLEncoding.default` by default
+     - parameter encoding: The parameter encoding. `JSONEncoding.default` by default
      - parameter headers: The HTTP headers. `nil` by default
      - parameter success: The block to execute if the request succeeds
      - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    open func update<T: AlamoRecordObject>(parameters: Parameters? = nil,
-                     encoding: ParameterEncoding = URLEncoding.default,
-                     headers: HTTPHeaders? = nil,
-                     success: ((T) -> Void)?,
-                     failure: ((E) -> Void)?) -> DataRequest {
+    open func update<O: AlamoRecordObject>(parameters: Parameters? = nil,
+                                           encoding: ParameterEncoding = JSONEncoding.default,
+                                           headers: HTTPHeaders? = nil,
+                                           success: ((O) -> Void)?,
+                                           failure: ((E) -> Void)?) -> DataRequest {
         
-        return T.update(id: id,
+        return O.update(id: id,
                         parameters: parameters,
                         encoding: encoding,
                         headers: headers,
@@ -231,18 +213,18 @@ open class AlamoRecordObject<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NS
         Updates an object of this instance based with the given id
         - parameter id: The id of the object to update
         - parameter parameters: The parameters. `nil` by default
-        - parameter encoding: The parameter encoding. `URLEncoding.default` by default
+        - parameter encoding: The parameter encoding. `JSONEncoding.default` by default
         - parameter headers: The HTTP headers. `nil` by default
         - parameter success: The block to execute if the request succeeds
         - parameter failure: The block to execute if the request fails
      */
     @discardableResult
-    open class func update<T: AlamoRecordObject>(id: IDType,
-                      parameters: Parameters? = nil,
-                      encoding: ParameterEncoding = URLEncoding.default,
-                      headers: HTTPHeaders? = nil,
-                      success: ((T) -> Void)?,
-                      failure: ((E) -> Void)?) -> DataRequest {
+    open class func update<O: AlamoRecordObject>(id: IDType,
+                                                 parameters: Parameters? = nil,
+                                                 encoding: ParameterEncoding = JSONEncoding.default,
+                                                 headers: HTTPHeaders? = nil,
+                                                 success: ((O) -> Void)?,
+                                                 failure: ((E) -> Void)?) -> DataRequest {
         
         return requestManager.updateObject(id: id,
                                            parameters: parameters,
@@ -257,7 +239,7 @@ open class AlamoRecordObject<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NS
          Updates an object of this instance based with the given id
          - parameter id: The id of the object to update
          - parameter parameters: The parameters. `nil` by default
-         - parameter encoding: The parameter encoding. `URLEncoding.default` by default
+         - parameter encoding: The parameter encoding. `JSONEncoding.default` by default
          - parameter headers: The HTTP headers. `nil` by default
          - parameter success: The block to execute if the request succeeds
          - parameter failure: The block to execute if the request fails
@@ -265,7 +247,7 @@ open class AlamoRecordObject<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NS
     @discardableResult
     open class func update(id: IDType,
                            parameters: Parameters? = nil,
-                           encoding: ParameterEncoding = URLEncoding.default,
+                           encoding: ParameterEncoding = JSONEncoding.default,
                            headers: HTTPHeaders? = nil,
                            success: (() -> Void)?,
                            failure: ((E) -> Void)?) -> DataRequest {
@@ -282,14 +264,14 @@ open class AlamoRecordObject<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NS
          Updates an object of this instance based with the given id
          - parameter id: The id of the object to update
          - parameter parameters: The parameters. `nil` by default
-         - parameter encoding: The parameter encoding. `URLEncoding.default` by default
+         - parameter encoding: The parameter encoding. `JSONEncoding.default` by default
          - parameter headers: The HTTP headers. `nil` by default
          - parameter success: The block to execute if the request succeeds
          - parameter failure: The block to execute if the request fails
      */
     @discardableResult
     open func update(parameters: Parameters? = nil,
-                     encoding: ParameterEncoding = URLEncoding.default,
+                     encoding: ParameterEncoding = JSONEncoding.default,
                      headers: HTTPHeaders? = nil,
                      success: (() -> Void)?,
                      failure: ((E) -> Void)?) -> DataRequest {
@@ -305,14 +287,14 @@ open class AlamoRecordObject<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NS
     /**
      Destroys the object
          - parameter parameters: The parameters. `nil` by default
-         - parameter encoding: The parameter encoding. `URLEncoding.default` by default
+         - parameter encoding: The parameter encoding. `JSONEncoding.default` by default
          - parameter headers: The HTTP headers. `nil` by default
          - parameter success: The block to execute if the request succeeds
          - parameter failure: The block to execute if the request fails
      */
     @discardableResult
     open func destroy(parameters: Parameters? = nil,
-                      encoding: ParameterEncoding = URLEncoding.default,
+                      encoding: ParameterEncoding = JSONEncoding.default,
                       headers: HTTPHeaders? = nil,
                       success: (() -> Void)?,
                       failure: ((E) -> Void)?) -> DataRequest {
@@ -329,18 +311,18 @@ open class AlamoRecordObject<U: AlamoRecordURL, E: AlamoRecordError, IDType>: NS
         Finds an object of this instance based on the given id
         - parameter id: The id of the object to destroy
         - parameter parameters: The parameters. `nil` by default
-        - parameter encoding: The parameter encoding. `URLEncoding.default` by default
+        - parameter encoding: The parameter encoding. `JSONEncoding.default` by default
         - parameter headers: The HTTP headers. `nil` by default
         - parameter success: The block to execute if the request succeeds
         - parameter failure: The block to execute if the request fails
      */
     @discardableResult
     open class func destroy(id: IDType,
-                      parameters: Parameters? = nil,
-                      encoding: ParameterEncoding = URLEncoding.default,
-                      headers: HTTPHeaders? = nil,
-                      success: (() -> Void)?,
-                      failure: ((E) -> Void)?) -> DataRequest {
+                            parameters: Parameters? = nil,
+                            encoding: ParameterEncoding = JSONEncoding.default,
+                            headers: HTTPHeaders? = nil,
+                            success: (() -> Void)?,
+                            failure: ((E) -> Void)?) -> DataRequest {
         
         return requestManager.destroyObject(url: urlForDestroy(id),
                                             parameters: parameters,

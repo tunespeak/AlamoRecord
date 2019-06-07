@@ -13,24 +13,14 @@ class AlamoRecordTests: XCTestCase {
     
     internal var validationExpectation: XCTestExpectation?
     
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
     func testThatCreateHelperWorks() {
         initializeExpectation()
-        let parameters: [String : String] = ["userId": "4",
-                                             "title" : "AlamoRecord Title",
+        let parameters: [String : String] = ["title" : "AlamoRecord Title",
                                              "body": "AlamoRecord Body"]
         Post.create(parameters: parameters, success: { (post: Post) in
             self.validationExpectation?.fulfill()
-            XCTAssertEqual([parameters["userId"]!, parameters["title"]!, parameters["body"]!],
-                           ["\(post.userId!)", post.title, post.body])
+            XCTAssertEqual([parameters["title"]!, parameters["body"]!],
+                           [post.title, post.body])
         }) { (error) in
             self.validationExpectation?.fulfill()
             XCTFail(error.description)
@@ -43,12 +33,11 @@ class AlamoRecordTests: XCTestCase {
         initializeExpectation()
         Post.find(id: 1, success: { (post: Post) in
             self.validationExpectation?.fulfill()
-            let userId: String = "1"
             let id: String = "1"
             let title: String = "sunt aut facere repellat provident occaecati excepturi optio reprehenderit"
             let body: String = "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
-            XCTAssertEqual([userId, id, title, body],
-                           ["\(post.userId!)", "\(post.id!)", post.title, post.body])
+            XCTAssertEqual([id, title, body],
+                           ["\(post.id)", post.title, post.body])
         }) { (error) in
             self.validationExpectation?.fulfill()
             XCTFail(error.description)
@@ -59,10 +48,12 @@ class AlamoRecordTests: XCTestCase {
     
     func testThatUpdateHelperWorksOnClass() {
         initializeExpectation()
-        let parameters: [String : String] = ["title" : "AlamoRecord Title Updated"]
+        let parameters: [String : String] = ["title" : "AlamoRecord Title Updated",
+                                             "body": "AlamoRecord Body Updated"]
         Post.update(id: 1, parameters: parameters, success: { (post: Post) in
             self.validationExpectation?.fulfill()
-            XCTAssertEqual(parameters["title"]!, post.title)
+            XCTAssertEqual(parameters["title"], post.title)
+            XCTAssertEqual(parameters["body"], post.body)
         }) { (error) in
             self.validationExpectation?.fulfill()
             XCTFail(error.description)
@@ -73,12 +64,14 @@ class AlamoRecordTests: XCTestCase {
     
     func testThatUpdateHelperWorksOnInstance() {
         initializeExpectation()
-        let parameters: [String : String] = ["title" : "AlamoRecord Title Updated"]
+        let parameters: [String : String] = ["title" : "AlamoRecord Title Updated",
+                                             "body": "AlamoRecord Body Updated"]
         Post.find(id: 1, success: { (post: Post) in
             
             post.update(parameters: parameters, success: { (updatedPost: Post) in
                 self.validationExpectation?.fulfill()
-                XCTAssertEqual(parameters["title"]!, updatedPost.title)
+                XCTAssertEqual(parameters["title"], updatedPost.title)
+                XCTAssertEqual(parameters["body"], updatedPost.body)
             }, failure: { (error) in
                 self.validationExpectation?.fulfill()
                 XCTFail(error.description)

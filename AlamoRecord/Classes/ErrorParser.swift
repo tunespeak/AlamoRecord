@@ -16,30 +16,26 @@
  
  */
 
-import ObjectMapper
+import Foundation
 
 class ErrorParser: NSObject {
 
     /*
         Parses a failed request into an instance of an AlamoRecordError
-        - parameter data: The data of the failed request
-        - parameter error: The error of the failed request
+        - parameter data: The data of the request
+        - parameter error: The error of the request
+        - parameter statusCode: The status code of the request
      */
-    open class func parse<E: AlamoRecordError>(_ data: Data?, error: NSError) -> E {
+    open class func parse<E: AlamoRecordError>(_ data: Data?, error: Error, statusCode: Int?) -> E {
         
-        guard let data = data else {
-            return E(nsError: error)
-        }
+        guard let data = data,
+            let statusCode = statusCode,
+            (200...299).contains(statusCode) == false else {  return E(error: error) }
         
         do {
-            let json = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments)
-            if let json = json as? [String: Any] {
-                return Mapper<E>().map(JSON: json)!
-            } else {
-                return E(nsError: error)
-            }
+            return try JSONDecoder().decode(E.self, from: data)
         } catch (_) {
-            return E(nsError: error)
+            return E(error: error)
         }
     }
     

@@ -15,38 +15,33 @@
  THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  
  */
+import Foundation
 
-import ObjectMapper
-
-open class AlamoRecordError: NSError, Mappable {
-    
-    override open var description: String {
-        guard let nsError = nsError else {
-            return "[AlamoRecordError] No description could be found for this error."
-        }
-        return "[AlamoRecordError] \(nsError.localizedDescription)"
-    }
+open class AlamoRecordError: Error {
     
     /// The error of the failed request
-    public var nsError: NSError?
+    public let error: Error?
     
-    public required init() {
-        super.init(domain: "", code: -1, userInfo: [:])
+    required public init(error: Error) {
+        self.error = error
     }
     
-    required public init(nsError: NSError) {
-        super.init(domain: nsError.domain, code: nsError.code, userInfo: nsError.userInfo)
-        self.nsError = nsError
+    public required init(from decoder: Decoder) throws {
+        error = nil
     }
+
+}
+
+extension AlamoRecordError: Codable {
+    open func encode(to encoder: Encoder) throws {}
+}
+
+extension AlamoRecordError: CustomStringConvertible {
     
-    required public init?(map: Map) {
-        super.init(domain: "", code: -1, userInfo: [:])
-        mapping(map: map)
+    open var description: String {
+        guard let error = error else {
+            return "❗️ [AlamoRecordError] No description could be found for this error."
+        }
+        return "❗️ [AlamoRecordError] \(error.localizedDescription)"
     }
-    
-    required public init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
-    open func mapping(map: Map) {}
 }
