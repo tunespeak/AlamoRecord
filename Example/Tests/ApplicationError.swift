@@ -8,9 +8,4 @@
 
 import AlamoRecord
 
-class ApplicationError: AlamoRecordError {
-    
-    required init(from decoder: Decoder) throws {
-        <#code#>
-    }
-}
+class ApplicationError: AlamoRecordError {}
