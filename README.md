@@ -2,7 +2,7 @@
 
 [![Version](https://img.shields.io/cocoapods/v/AlamoRecord.svg?style=flat)](http://cocoapods.org/pods/AlamoRecord)
 [![Platform](https://img.shields.io/cocoapods/p/AlamoRecord.svg?style=flat)](http://cocoapods.org/pods/AlamoRecord)
-<a href="https://developer.apple.com/swift"><img src="https://img.shields.io/badge/swift-5-4BC51D.svg?style=flat" alt="Language: Swift" /></a>
+<a href="https://developer.apple.com/swift"><img src="https://img.shields.io/badge/swift-5.1-4BC51D.svg?style=flat" alt="Language: Swift" /></a>
 [![License](https://img.shields.io/cocoapods/l/AlamoRecord.svg?style=flat)](http://cocoapods.org/pods/AlamoRecord)
 
 ## Written in Swift 5
@@ -13,7 +13,7 @@ AlamoRecord is a powerful yet simple framework that eliminates the often complex
 
 - iOS 10.0+ / macOS 10.12+ / tvOS 10.0+ / watchOS 3.0+
 - Xcode 10.2+
-- Swift 5
+- Swift 5.1
 
 ## Installation
 
