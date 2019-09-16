@@ -18,10 +18,7 @@
 
 import Alamofire
 
-open class Configuration: NSObject {
-    
-    /// See URLSessionConfiguration Documentation
-    public let urlSessionConfiguration: URLSessionConfiguration
+open class Configuration {
     
     /// See Alamofire.RequestInterceptor Documentation
     public var requestInterceptor: RequestInterceptor?
@@ -35,14 +32,10 @@ open class Configuration: NSObject {
     /// Observer that gets called after each requests finishes
     public var requestObserver: RequestObserver?
     
-    public override init() {
-        
-        let bundleIdentifier = Bundle.main.bundleIdentifier ?? "AlamoRecord"
-        let randomId = UUID.init().uuidString // Need a random id in case multiple request manager instances are created
-        urlSessionConfiguration = URLSessionConfiguration.background(withIdentifier: "\(bundleIdentifier)-\(randomId).background")
+    public init() {
+        let urlSessionConfiguration = URLSessionConfiguration.af.default
         urlSessionConfiguration.timeoutIntervalForRequest = 30.0
         urlSessionConfiguration.timeoutIntervalForResource = 30.0
-        super.init()
     }
     
     public convenience init(builder: (Configuration) -> ()) {

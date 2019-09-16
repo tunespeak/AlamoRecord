@@ -39,7 +39,7 @@ class Logger: NSObject {
         Logs a finished request that just started to the console
         - parameter response: The response to log to the console
      */
-    class func logFinishedResponse<AnyObject>(response: DataResponse<AnyObject>) {
+    class func logFinishedResponse<AnyObject>(response: AFDataResponse<AnyObject>) {
         
         guard loggingEnabled,
             let method = response.request?.httpMethod,

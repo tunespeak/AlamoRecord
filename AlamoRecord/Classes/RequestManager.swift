@@ -38,9 +38,7 @@ open class RequestManager<Url: AlamoRecordURL, ARError: AlamoRecordError, IDType
     
     public init(configuration: Configuration) {
         self.configuration = configuration
-        session = Session(configuration: configuration.urlSessionConfiguration,
-                          startRequestsImmediately: true,
-                          interceptor: configuration.requestInterceptor)
+        session = Session(startRequestsImmediately: true, interceptor: configuration.requestInterceptor)
     }
     
     /**
@@ -143,7 +141,7 @@ open class RequestManager<Url: AlamoRecordURL, ARError: AlamoRecordError, IDType
                            encoding: encoding,
                            headers: headers)
             .responseDecodable(decoder: AlamoRecordDecoder(keyPath: keyPath),
-                               completionHandler: { (response: DataResponse<C>) in
+                               completionHandler: { (response: AFDataResponse<C>) in
                 Logger.logFinishedResponse(response: response)
                 switch response.result {
                 case .success(let value):
@@ -181,7 +179,7 @@ open class RequestManager<Url: AlamoRecordURL, ARError: AlamoRecordError, IDType
                            encoding: encoding,
                            headers: headers)
             .responseDecodable(decoder: AlamoRecordDecoder(keyPath: keyPath),
-                               completionHandler: { (response: DataResponse<[C]>) in
+                               completionHandler: { (response: AFDataResponse<[C]>) in
                 Logger.logFinishedResponse(response: response)
                 switch response.result {
                 case .success(let value):
@@ -492,7 +490,7 @@ open class RequestManager<Url: AlamoRecordURL, ARError: AlamoRecordError, IDType
                 progressHandler?(progress)
             }
             .responseDecodable(decoder: AlamoRecordDecoder(keyPath: keyPath),
-                               completionHandler: { (response: DataResponse<C>) in
+                               completionHandler: { (response: AFDataResponse<C>) in
                 switch response.result {
                 case .success(let value):
                     success?(value)
@@ -540,42 +538,42 @@ open class RequestManager<Url: AlamoRecordURL, ARError: AlamoRecordError, IDType
     }
 
     /**
-         Performs any logic associated with a successful DataResponse<Any>
+         Performs any logic associated with a successful AFDataResponse<Any>
          - parameter success: The block to execute if the request succeeds
          - parameter response: The response of the request
      */
-    private func onSuccess(success: (() -> Void)?, response: DataResponse<Any>) {
+    private func onSuccess(success: (() -> Void)?, response: AFDataResponse<Any>) {
         sendEventsToObservers(response: response.response)
         success?()
     }
     
     /**
-         Performs any logic associated with a successful DataResponse<C>
+         Performs any logic associated with a successful AFDataResponse<C>
          - parameter success: The block to execute if the request succeeds
          - parameter response: The response of the request
      */
-    private func onSuccess<C: Codable>(success: ((C) -> Void)?, response: DataResponse<C>, value: C) {
+    private func onSuccess<C: Codable>(success: ((C) -> Void)?, response: AFDataResponse<C>, value: C) {
         sendEventsToObservers(response: response.response)
         success?(value)
     }
     
     /**
-         Performs any logic associated with a successful DataResponse<[C]>
+         Performs any logic associated with a successful AFDataResponse<[C]>
          - parameter success: The block to execute if the request succeeds
          - parameter response: The response of the request
      */
-    private func onSuccess<C: Codable>(success: (([C]) -> Void)?, response: DataResponse<[C]>, value: [C]) {
+    private func onSuccess<C: Codable>(success: (([C]) -> Void)?, response: AFDataResponse<[C]>, value: [C]) {
         sendEventsToObservers(response: response.response)
         success?(value)
     }
     
     /**
-         Performs any logic associated with a successful DefaultDownloadResponse
+         Performs any logic associated with a successful AFDownloadResponse
          - parameter success: The block to execute if the request succeeds
          - parameter response: The response of the request
      */
     private func onSuccess(success: ((URL?) -> Void)?,
-                           response: DownloadResponse<URL?>) {
+                           response: AFDownloadResponse<URL?>) {
         sendEventsToObservers(response: response.response)
         success?(response.fileURL)
     }
@@ -597,13 +595,13 @@ open class RequestManager<Url: AlamoRecordURL, ARError: AlamoRecordError, IDType
     }
     
     /**
-         Performs any logic associated with a failed DataResponse<Any>
+         Performs any logic associated with a failed AFDataResponse<Any>
          - parameter error: The error the request returned
          - parameter response: The response of the request
          - parameter failure: The block to execute if the request fails
      */
     private func onFailure(error: Error,
-                           response: DataResponse<Any>,
+                           response: AFDataResponse<Any>,
                            failure:((ARError) -> Void)?) {
         onFailure(error: error,
                   responseData: response.data,
@@ -612,13 +610,13 @@ open class RequestManager<Url: AlamoRecordURL, ARError: AlamoRecordError, IDType
     }
 
     /**
-         Performs any logic associated with a failed DataResponse<C>
+         Performs any logic associated with a failed AFDataResponse<C>
          - parameter error: The error the request returned
          - parameter response: The response of the request
          - parameter failure: The block to execute if the request fails
      */
     private func onFailure<C: Codable>(error: Error,
-                                       response: DataResponse<C>,
+                                       response: AFDataResponse<C>,
                                        failure:((ARError) -> Void)?) {
         onFailure(error: error,
                   responseData: response.data,
@@ -627,13 +625,13 @@ open class RequestManager<Url: AlamoRecordURL, ARError: AlamoRecordError, IDType
     }
     
     /**
-         Performs any logic associated with a failed DataResponse<[C]>
+         Performs any logic associated with a failed AFDataResponse<[C]>
          - parameter error: The error the request returned
          - parameter response: The response of the request
          - parameter failure: The block to execute if the request fails
      */
     private func onFailure<C: Codable>(error: Error,
-                                       response: DataResponse<[C]>,
+                                       response: AFDataResponse<[C]>,
                                        failure:((ARError) -> Void)?) {
         onFailure(error: error,
                   responseData: response.data,
@@ -642,13 +640,13 @@ open class RequestManager<Url: AlamoRecordURL, ARError: AlamoRecordError, IDType
     }
     
     /**
-         Performs any logic associated with a failed DefaultDownloadResponse
+         Performs any logic associated with a failed AFDownloadResponse
          - parameter error: The error the request returned
          - parameter response: The response of the request
          - parameter failure: The block to execute if the request fails
      */
     private func onFailure(error: Error,
-                           response: DownloadResponse<URL?>,
+                           response: AFDownloadResponse<URL?>,
                            failure:((ARError) -> Void)?) {
         onFailure(error: error,
                   responseData: nil,

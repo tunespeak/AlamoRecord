@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'AlamoRecord'
-  s.version          = '2.0.1'
+  s.version          = '2.1.0'
   s.summary          = 'An elegant Alamofire wrapper inspired by ActiveRecord.'
   s.description      = <<-DESC
 AlamoRecord is a powerful yet simple framework that eliminates the often complex networking layer that exists between your networking framework and your application. AlamoRecord uses the power of AlamoFire, AlamofireObjectMapper and the concepts behind the ActiveRecord pattern to create a networking layer that makes interacting with your API easier than ever.
@@ -11,7 +11,7 @@ AlamoRecord is a powerful yet simple framework that eliminates the often complex
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Tunespeak' => 'daltonhint4@gmail.com' }
   s.source           = { :git => 'https://github.com/tunespeak/AlamoRecord.git', :tag => s.version.to_s }
-  s.swift_version = '5.0'
+  s.swift_version = '5.1'
 
   s.ios.deployment_target = '10.0'
   s.osx.deployment_target = '10.12'
@@ -19,6 +19,6 @@ AlamoRecord is a powerful yet simple framework that eliminates the often complex
   s.watchos.deployment_target = '3.0'
 
   s.source_files = 'AlamoRecord/Classes/**/*'
-  s.dependency 'Alamofire', '5.0.0-beta.6'
+  s.dependency 'Alamofire', '5.0.0-rc.2'
   
 end
