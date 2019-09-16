@@ -485,17 +485,22 @@ open class RequestManager<Url: AlamoRecordURL, ARError: AlamoRecordError, IDType
                                    success: ((C) -> Void)?,
                                    failure: ((ARError) -> Void)?) {
     
+        Logger.logRequest(.post, url: url.absolute)
+        
         session.upload(multipartFormData: multipartFormData, to: url.absolute, headers: headers)
             .uploadProgress { progress in
                 progressHandler?(progress)
             }
             .responseDecodable(decoder: AlamoRecordDecoder(keyPath: keyPath),
                                completionHandler: { (response: AFDataResponse<C>) in
+                                
+                Logger.logFinishedResponse(response: response)
+                                
                 switch response.result {
                 case .success(let value):
-                    success?(value)
+                    self.onSuccess(success: success, response: response, value: value)
                 case .failure(let error):
-                    failure?(ARError(error: error))
+                    self.onFailure(error: ARError(error: error), response: response, failure: failure)
                 }
             })
     }
