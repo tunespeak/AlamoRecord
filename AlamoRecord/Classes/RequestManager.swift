@@ -72,7 +72,6 @@ open class RequestManager<Url: AlamoRecordURL, ARError: AlamoRecordError, IDType
         - parameter parameters: The parameters. `nil` by default
         - parameter encoding: The parameter encoding. `JSONEncoding.default` by default
         - parameter headers: The HTTP headers. `nil` by default
-        - parameter emptyBody: Wether or not the response will have an empty body. `false` by default
         - parameter success: The block to execute if the request succeeds
         - parameter failure: The block to execute if the request fails
      */
@@ -82,7 +81,6 @@ open class RequestManager<Url: AlamoRecordURL, ARError: AlamoRecordError, IDType
                           parameters: Parameters? = nil,
                           encoding: ParameterEncoding = JSONEncoding.default,
                           headers: HTTPHeaders? = nil,
-                          emptyBody: Bool = false,
                           success: (() -> Void)?,
                           failure: ((ARError) -> Void)?) -> DataRequest {
         
@@ -94,16 +92,6 @@ open class RequestManager<Url: AlamoRecordURL, ARError: AlamoRecordError, IDType
             .responseJSON { response in
                 
                 Logger.logFinishedResponse(response: response)
-                
-                guard emptyBody else {
-                    switch response.result {
-                    case .success:
-                        self.onSuccess(success: success, response: response)
-                    case .failure(let error):
-                        self.onFailure(error: error, response: response, failure: failure)
-                    }
-                    return
-                }
                 
                 if (200...299).contains(response.response?.statusCode ?? 0) {
                     self.onSuccess(success: success, response: response)
