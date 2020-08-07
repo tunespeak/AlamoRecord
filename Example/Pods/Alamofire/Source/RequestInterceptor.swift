@@ -45,7 +45,7 @@ public enum RetryResult {
     case retryWithDelay(TimeInterval)
     /// Do not retry.
     case doNotRetry
-    /// Do not retry due to the associated `AFError`.
+    /// Do not retry due to the associated `Error`.
     case doNotRetryWithError(Error)
 }
 
@@ -181,11 +181,12 @@ open class Interceptor: RequestInterceptor {
     /// Creates an instance from the arrays of `RequestAdapter` and `RequestRetrier` values.
     ///
     /// - Parameters:
-    ///   - adapters: `RequestAdapter` values to be used.
-    ///   - retriers: `RequestRetrier` values to be used.
-    public init(adapters: [RequestAdapter] = [], retriers: [RequestRetrier] = []) {
-        self.adapters = adapters
-        self.retriers = retriers
+    ///   - adapters:     `RequestAdapter` values to be used.
+    ///   - retriers:     `RequestRetrier` values to be used.
+    ///   - interceptors: `RequestInterceptor`s to be used.
+    public init(adapters: [RequestAdapter] = [], retriers: [RequestRetrier] = [], interceptors: [RequestInterceptor] = []) {
+        self.adapters = adapters + interceptors
+        self.retriers = retriers + interceptors
     }
 
     open func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {

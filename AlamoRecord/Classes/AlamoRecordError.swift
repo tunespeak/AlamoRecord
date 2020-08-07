@@ -22,12 +22,17 @@ open class AlamoRecordError: Error {
     /// The error of the failed request
     public let error: Error?
     
-    required public init(error: Error) {
+    // The HTTP Status Code of the request as an enum
+    public let statusCode: HTTPStatusCode
+    
+    required public init(error: Error, statusCode: Int?) {
         self.error = error
+        self.statusCode = HTTPStatusCode(rawValue: statusCode ?? -1) ?? .unknown
     }
     
     public required init(from decoder: Decoder) throws {
         error = nil
+        statusCode = .unknown
     }
 
 }

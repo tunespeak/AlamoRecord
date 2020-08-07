@@ -4,9 +4,8 @@
 <a href="https://github.com/Carthage/Carthage/"><img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat"></a>
 [![Platform](https://img.shields.io/cocoapods/p/NotificationBannerSwift.svg?style=flat)](http://cocoapods.org/pods/NotificationBannerSwift)
 <a href="https://developer.apple.com/swift"><img src="https://img.shields.io/badge/swift-5-4BC51D.svg?style=flat" alt="Language: Swift" /></a>
-[![Downloads](https://img.shields.io/cocoapods/dt/NotificationBannerSwift.svg)](http://cocoapods.org/pods/NotificationBannerSwift)
-[![Apps](https://img.shields.io/cocoapods/at/NotificationBannerSwift.svg)](http://cocoapods.org/pods/NotificationBannerSwift)
 [![License](https://img.shields.io/cocoapods/l/NotificationBannerSwift.svg?style=flat)](http://cocoapods.org/pods/NotificationBannerSwift)
+
 ## Written in Swift 5
 
 NotificationBanner is an extremely customizable and lightweight library that makes the task of displaying in app notification banners and drop down alerts an absolute breeze in iOS.
@@ -14,6 +13,10 @@ NotificationBanner is an extremely customizable and lightweight library that mak
 | Basic Banners | Banners with Side Views  | Status Bar Banners |
 | ------------- | ------------- | ------------- |
 | ![Basic Banners](NotificationBanner/Assets/basic.gif)  | ![Banners with Side Views](NotificationBanner/Assets/side_views.gif)  | ![Status Bar Banners](NotificationBanner/Assets/status_bar.gif) |
+
+| Growing Banners | Floating Banners  | Stacked Banners |
+| ------------- | ------------- | ------------- | 
+| ![Growing Banners](NotificationBanner/Assets/growing.gif)  | ![Floating Banners](NotificationBanner/Assets/floating.gif) | ![Floating Banners](NotificationBanner/Assets/stacked.gif) |
 
 ## Features
 - Highly customizable ✅
@@ -28,11 +31,12 @@ NotificationBanner is an extremely customizable and lightweight library that mak
 - Presenting from top or bottom support ✅
 - Haptic feeback support ✅
 - Built in banner queue ✅
+- Allow to display several banners simultaneously, configurable in banners queue
 
 ## Requirements
 
- - iOS 9.0+
- - Xcode 9.0+
+ - iOS 10.0+
+ - Xcode 10.0+
 
 ## Installation
 
@@ -41,21 +45,23 @@ NotificationBanner is an extremely customizable and lightweight library that mak
 NotificationBanner is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
-#### Swift 5
+#### Swift 5 + xCode 11 + iOS 13 Support
 
 ```ruby
-pod 'NotificationBannerSwift'
+pod 'NotificationBannerSwift', '~> 3.0.0'
 ```
 
-Then add `import NotificationBannerSwift` at the top of each file you use NotificationBanner in your project.
+#### Swift 5 + xCode 10.x
+
+```ruby
+pod 'NotificationBannerSwift', '2.5.0'
+```
 
 #### Swift 4.2
 
 ```ruby
 pod 'NotificationBannerSwift', '2.0.1'
 ```
-
-Then add `import NotificationBannerSwift` at the top of each file you use NotificationBanner in your project.
 
 #### Swift 4.0
 
@@ -75,7 +81,7 @@ To use NotificationBanner via Carthage simply add this line to your `Cartfile`:
 github "Daltron/NotificationBanner" "master"
 ```
 
-Then add `NotificationBanner.framework` and the dependencies `SnapKit.framework` and `MarqueeLabelSwift.framework` in your project.
+Then add `NotificationBanner.framework` and the dependencies `SnapKit.framework` and `MarqueeLabel.framework` in your project.
 
 ## Usage
 
@@ -132,7 +138,7 @@ NotificationBanner has five prebuilt styles that you can choose from:
 public enum BannerStyle {
     case danger
     case info
-    case none
+    case customView
     case success
     case warning
 }
@@ -153,11 +159,11 @@ class CustomBannerColors: BannerColorsProtocol {
 
     internal func color(for style: BannerStyle) -> UIColor {
         switch style {
-            case .danger:   // Your custom .danger color
-            case .info:     // Your custom .info color
-            case .none:     // Your custom .none color
-            case .success:  // Your custom .success color
-            case .warning:  // Your custom .warning color
+            case .danger:	// Your custom .danger color
+            case .info:		// Your custom .info color
+            case .customView:	// Your custom .customView color
+            case .success:	// Your custom .success color
+            case .warning:	// Your custom .warning color
         }
     }
 
@@ -283,19 +289,84 @@ let numberOfBanners = NotificationBannerQueue.default.numberOfBanners
 
  <b>This is all automatically managed!</b>
 
+## Banner Queue and display banners simultaneously (stacked)
+
+You can also create the queue to display several banners at once with controlling of maximum number of banners to be displayed simultaneously. You can "show" more banners than allowed by queue settings - banners what exceed this value will be displayed some time later, after some banners already displayed on screen will be closed. In example below we create queue with maximum simultaneous banners allowed - 3:
+
+```swift
+let bannerQueueToDisplaySeveralBanners = NotificationBannerQueue(maxBannersOnScreenSimultaneously: 3)
+```
+
+Create five different banners:
+
+```swift
+let banner1 = FloatingNotificationBanner(title: "Success Notification - 1",
+                                         subtitle: "First Notification from 5 in current queue with 3 banners allowed simultaneously",
+                                         style: .success)
+banner1.delegate = self
+
+let banner2 = FloatingNotificationBanner(title: "Danger Notification - 2",
+                                         subtitle: "Second Notification from 5 in current queue with 3 banners allowed simultaneously",
+                                         style: .danger)
+banner2.delegate = self
+
+let banner3 = FloatingNotificationBanner(title: "Info Notification - 3",
+                                         subtitle: "Third Notification from 5 in current queue with 3 banners allowed simultaneously",
+                                         style: .info)
+banner3.delegate = self
+
+let banner4 = FloatingNotificationBanner(title: "Success Notification - 4",
+                                         subtitle: "Fourth Notification from 5 in current queue with 3 banners allowed simultaneously",
+                                         style: .success)
+banner4.delegate = self
+
+let banner5 = FloatingNotificationBanner(title: "Info Notification - 5",
+                                         subtitle: "Fifth Notification from 5 in current queue with 3 banners allowed simultaneously",
+                                         style: .info)
+banner5.delegate = self
+```
+
+and show all five banners at once:
+```swift
+showBanners([banner1, banner2, banner3, banner4, banner5],
+            in: bannerQueue5AllowedMixed)
+```
+
+using this supporting method
+
+```swift
+func showBanners(_ banners: [FloatingNotificationBanner],
+                 in notificationBannerQueue: NotificationBannerQueue) {
+    banners.forEach { banner in
+        banner.show(bannerPosition: selectedBannerPosition(),
+                    queue: notificationBannerQueue,
+                    cornerRadius: 8,
+                    shadowColor: UIColor(red: 0.431, green: 0.459, blue: 0.494, alpha: 1),
+                    shadowBlurRadius: 16,
+                    shadowEdgeInsets: UIEdgeInsets(top: 8, left: 8, bottom: 0, right: 8))
+    }
+}
+```
+
+It will display first three banners at once, and after some time (or by user tap) it will be hidden and 4 and 5 banner will be displayed when. All it with fancy animation.
+
 ## Feature Requests
 
 I'd love to know anything that you think NotificationBanner is missing. Open an issue and I'll add the `feature request` label to it and I'll do everything I can to accomodate that request if it is in the library's best interest. 😄 
 
 ## Apps that Use NotificationBanner
 [![Q - Talk About Music](AppIcons/q_talk_about_music.jpg)](https://itunes.apple.com/us/app/q-talk-about-music/id1071551321?mt=8) 
-[![VH Dispatch](AppIcons/vh_dispatch.png)](https://itunes.apple.com/us/app/vh-dispatch/id1249569084?mt=8)
-[![Stikkr](AppIcons/stikkr.png)](https://itunes.apple.com/us/app/stikkr/id851375015?ls=1&mt=8)
-[![CardCast](AppIcons/cardcast.png)](https://itunes.apple.com/us/app/cardcast-business-cards/id1269278947?mt=8)
-[![Happy Scale](AppIcons/happy_scale.png)](https://itunes.apple.com/us/app/happy-scale/id532430574?mt=8)
-[![Wanderings](AppIcons/wanderings.png)](https://itunes.apple.com/us/app/wanderings-travel-tracking/id1292503352?mt=8)
-[![Modern Magic 8 Ball](AppIcons/modernmagic8ball.png)](https://itunes.apple.com/us/app/modern-magic-8-ball/id1381145384?mt=8)
- 
+[![VH Dispatch](AppIcons/vh_dispatch.png)](https://apps.apple.com/app/vh-dispatch/id1249569084)
+[![Stikkr](AppIcons/stikkr.png)](https://apps.apple.com/app/stikkr/id851375015)
+[![CardCast](AppIcons/cardcast.png)](https://apps.apple.com/app/cardcast-business-cards/id1269278947)
+[![Happy Scale](AppIcons/happy_scale.png)](https://apps.apple.com/app/happy-scale/id532430574)
+[![Wanderings](AppIcons/wanderings.png)](https://apps.apple.com/app/wanderings-travel-tracking/id1292503352)
+[![Modern Magic 8 Ball](AppIcons/modernmagic8ball.png)](https://apps.apple.com/app/modern-magic-8-ball/id1381145384)
+[![Envision: Habits Tracker](AppIcons/envision.png)](https://apps.apple.com/app/envision-habits-tracker/id1423771095)
+[![TSUM](AppIcons/tsum.png)](https://apps.apple.com/ru/app/%D1%86%D1%83%D0%BC-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%BD%D0%B5%D1%82-%D0%BC%D0%B0%D0%B3%D0%B0%D0%B7%D0%B8%D0%BD-%D0%BE%D0%B4%D0%B5%D0%B6%D0%B4%D1%8B/id1089560311)
+[![RIS](AppIcons/ris.png)](https://apps.apple.com/ru/app/%D1%80%D0%B5%D1%81%D1%82%D0%BE%D1%80%D0%B0%D0%BD%D1%8B-%D1%80%D0%B8%D1%81-%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7-%D0%B4%D0%BE%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0/id932844115)
+[![LukaPizza](AppIcons/lukapizza.png)](https://apps.apple.com/ru/app/luka-pizza-%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7-%D0%B8-%D0%B4%D0%BE%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0/id1202155629)
+
 #### Feel free to add yours!
 
 ## Author

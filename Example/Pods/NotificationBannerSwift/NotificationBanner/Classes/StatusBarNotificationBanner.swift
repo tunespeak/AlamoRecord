@@ -18,14 +18,10 @@
 
 import UIKit
 
-#if CARTHAGE_CONFIG
-    import MarqueeLabelSwift
-#else
-    import MarqueeLabel
-#endif
+import MarqueeLabel
 
 @objcMembers
-public class StatusBarNotificationBanner: BaseNotificationBanner {
+open class StatusBarNotificationBanner: BaseNotificationBanner {
 
     public override var bannerHeight: CGFloat {
         get {
@@ -34,7 +30,7 @@ public class StatusBarNotificationBanner: BaseNotificationBanner {
             } else if shouldAdjustForNotchFeaturedIphone() {
                 return 50.0
             } else {
-                return 20.0
+                return 20.0 + heightAdjustment
             }
         } set {
             customBannerHeight = newValue
@@ -53,7 +49,7 @@ public class StatusBarNotificationBanner: BaseNotificationBanner {
         contentView.addSubview(titleLabel!)
 
         titleLabel!.snp.makeConstraints { (make) in
-            make.top.equalToSuperview()
+            make.top.equalToSuperview().offset(heightAdjustment)
             make.left.equalToSuperview().offset(5)
             make.right.equalToSuperview().offset(-5)
             make.bottom.equalToSuperview()
@@ -77,7 +73,9 @@ public class StatusBarNotificationBanner: BaseNotificationBanner {
     }
 
     public init(customView: UIView) {
-        super.init(style: .none)
+        super.init(style: .customView)
+        self.customView = customView
+        
         contentView.addSubview(customView)
         customView.snp.makeConstraints { make in
             make.edges.equalTo(contentView)

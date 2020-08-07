@@ -28,14 +28,18 @@ class ErrorParser: NSObject {
      */
     open class func parse<E: AlamoRecordError>(_ data: Data?, error: Error, statusCode: Int?) -> E {
         
+        let code = statusCode
+        
         guard let data = data,
             let statusCode = statusCode,
-            (200...299).contains(statusCode) == false else {  return E(error: error) }
+            (200...299).contains(statusCode) == false else {
+                return E(error: error, statusCode: code)
+        }
         
         do {
             return try JSONDecoder().decode(E.self, from: data)
         } catch (_) {
-            return E(error: error)
+            return E(error: error, statusCode: nil)
         }
     }
     

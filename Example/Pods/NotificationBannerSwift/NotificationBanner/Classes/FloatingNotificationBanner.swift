@@ -19,7 +19,7 @@
 import UIKit
 import SnapKit
 
-public class FloatGrowingNotificationBanner: GrowingNotificationBanner {
+open class FloatingNotificationBanner: GrowingNotificationBanner {
     
     public init(title: String? = nil,
                 subtitle: String? = nil,
@@ -64,6 +64,18 @@ public class FloatGrowingNotificationBanner: GrowingNotificationBanner {
         }
     }
     
+    public init(customView: UIView) {
+        super.init(style: .customView)
+        self.customView = customView
+        
+        contentView.addSubview(customView)
+        customView.snp.makeConstraints { (make) in
+            make.edges.equalTo(contentView)
+        }
+        
+        spacerView.backgroundColor = customView.backgroundColor
+    }
+    
     /**
      Convenience function to display banner with non .zero default edge insets
      */
@@ -84,6 +96,11 @@ public class FloatGrowingNotificationBanner: GrowingNotificationBanner {
         
         if let cornerRadius = cornerRadius {
             contentView.layer.cornerRadius = cornerRadius
+            contentView.subviews.last?.layer.cornerRadius = cornerRadius
+        }
+        
+        if style == .customView, let customView = contentView.subviews.last {
+           customView.backgroundColor = customView.backgroundColor?.withAlphaComponent(transparency)
         }
 
         show(queuePosition: queuePosition,
@@ -105,7 +122,7 @@ public class FloatGrowingNotificationBanner: GrowingNotificationBanner {
     
 }
 
-private extension FloatGrowingNotificationBanner {
+private extension FloatingNotificationBanner {
     
     /**
      Add shadow for notification with specified parameters.
@@ -116,7 +133,9 @@ private extension FloatGrowingNotificationBanner {
                              cornerRadius: CGFloat = 0,
                              offset: UIOffset = .zero,
                              edgeInsets: UIEdgeInsets? = nil) {
-        
+
+        guard blurRadius >= 0 else { return }
+
         contentView.layer.shadowColor = color.cgColor
         contentView.layer.shadowOpacity = Float(opacity)
         contentView.layer.shadowRadius = blurRadius
@@ -131,6 +150,9 @@ private extension FloatGrowingNotificationBanner {
             shadowRect.size.height -= (edgeInsets.top + edgeInsets.bottom)
             contentView.layer.shadowPath = UIBezierPath(roundedRect: shadowRect, cornerRadius: cornerRadius).cgPath
         }
+        
+        contentView.layer.rasterizationScale = UIScreen.main.scale
+        contentView.layer.shouldRasterize = true
     }
     
 }

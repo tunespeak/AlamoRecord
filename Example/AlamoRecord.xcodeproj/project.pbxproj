@@ -22,6 +22,8 @@
 		5C6347151F0B3D3E00158A80 /* ApplicationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6346E51F0B02CD00158A80 /* ApplicationError.swift */; };
 		5C6347161F0B3D3E00158A80 /* ApplicationRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C63470C1F0B09B900158A80 /* ApplicationRequestManager.swift */; };
 		5C6347171F0B3D3E00158A80 /* ApplicationURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6346E31F0B02C000158A80 /* ApplicationURL.swift */; };
+		5C76EEEF24DCF08900D4E35E /* HTTPStatusCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C76EEEE24DCF08900D4E35E /* HTTPStatusCode.swift */; };
+		5C76EEF024DCF08900D4E35E /* HTTPStatusCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C76EEEE24DCF08900D4E35E /* HTTPStatusCode.swift */; };
 		5C86407F1F09D5E6001E8320 /* AlamoRecordError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C86407E1F09D5E6001E8320 /* AlamoRecordError.swift */; };
 		5C94C2FC1F08707F00762CFC /* AlamoRecordObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C94C2F31F08707F00762CFC /* AlamoRecordObject.swift */; };
 		5C94C2FE1F08707F00762CFC /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C94C2F41F08707F00762CFC /* Configuration.swift */; };
@@ -85,6 +87,7 @@
 		5C6346FF1F0B076B00158A80 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5C6347031F0B081500158A80 /* AlamoRecordTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamoRecordTests.swift; sourceTree = "<group>"; };
 		5C63470C1F0B09B900158A80 /* ApplicationRequestManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ApplicationRequestManager.swift; path = ../Tests/ApplicationRequestManager.swift; sourceTree = "<group>"; };
+		5C76EEEE24DCF08900D4E35E /* HTTPStatusCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPStatusCode.swift; sourceTree = "<group>"; };
 		5C86407E1F09D5E6001E8320 /* AlamoRecordError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AlamoRecordError.swift; path = ../../AlamoRecord/Classes/AlamoRecordError.swift; sourceTree = "<group>"; };
 		5C94C2F31F08707F00762CFC /* AlamoRecordObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AlamoRecordObject.swift; path = ../../AlamoRecord/Classes/AlamoRecordObject.swift; sourceTree = "<group>"; };
 		5C94C2F41F08707F00762CFC /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Configuration.swift; path = ../../AlamoRecord/Classes/Configuration.swift; sourceTree = "<group>"; };
@@ -214,6 +217,7 @@
 				5CA0A94E21825DA3002BA69A /* AlamoRecordURL.swift */,
 				5C94C2F41F08707F00762CFC /* Configuration.swift */,
 				5C94C2F51F08707F00762CFC /* ErrorParser.swift */,
+				5C76EEEE24DCF08900D4E35E /* HTTPStatusCode.swift */,
 				5C94C2F71F08707F00762CFC /* Logger.swift */,
 				5C94C2F81F08707F00762CFC /* RequestManager.swift */,
 				5C94C2F91F08707F00762CFC /* RequestObserver.swift */,
@@ -485,6 +489,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5C63470B1F0B088200158A80 /* ApplicationError.swift in Sources */,
+				5C76EEEF24DCF08900D4E35E /* HTTPStatusCode.swift in Sources */,
 				5CCB209A1F1706880027BA56 /* Logger.swift in Sources */,
 				5C25BD0922A9F6820074320C /* AlamoRecordDecoder.swift in Sources */,
 				5CCB20951F17064E0027BA56 /* Comment.swift in Sources */,
@@ -507,6 +512,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C76EEF024DCF08900D4E35E /* HTTPStatusCode.swift in Sources */,
 				5C94C2FE1F08707F00762CFC /* Configuration.swift in Sources */,
 				5CE6C8121F102B7E00965235 /* CommentsViewController.swift in Sources */,
 				5C6347161F0B3D3E00158A80 /* ApplicationRequestManager.swift in Sources */,

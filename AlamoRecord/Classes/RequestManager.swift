@@ -488,7 +488,11 @@ open class RequestManager<Url: AlamoRecordURL, ARError: AlamoRecordError, IDType
                 case .success(let value):
                     self.onSuccess(success: success, response: response, value: value)
                 case .failure(let error):
-                    self.onFailure(error: ARError(error: error), response: response, failure: failure)
+                    let arError = ARError(
+                        error: error,
+                        statusCode: response.response?.statusCode
+                    )
+                    self.onFailure(error: arError, response: response, failure: failure)
                 }
             })
     }
